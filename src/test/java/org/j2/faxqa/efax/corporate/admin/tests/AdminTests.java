@@ -60,7 +60,7 @@ public class AdminTests extends BaseTest {
 
 		homepage = new HomePage();
 		homepage.logout();
-		// CommonMethods.getWelcomeEmail(primaryemail);
+		// BasePage.getWelcomeEmail(primaryemail);
 		loginPage = new LoginPage();
 		loginPage.login(Config.AccountNumberMGMT, firstname + lastname, password);
 		homepage = new HomePage();

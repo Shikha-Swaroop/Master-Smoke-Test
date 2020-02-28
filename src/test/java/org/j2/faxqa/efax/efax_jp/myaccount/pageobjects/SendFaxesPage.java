@@ -10,11 +10,15 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestContext;
+
+import com.github.javafaker.Faker;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -37,17 +41,9 @@ public class SendFaxesPage {
 		wait = new WebDriverWait(driver, 30);
 		logger.info(driver.getTitle() + " - [" + driver.getCurrentUrl() + "]");
 	}
-
-	String attachments;
-	String random;
-	String email = "jagadeesh.medabalimi@j2.com";
-	String mode = "Standard";
-	String country = "United States";
-	@FindBy(id = "txt_websend_recipientFirstName")
+		
+	@FindBy(id = "txt_websend_recipientName")
 	private WebElement recipientFirstName;
-
-	@FindBy(id = "txt_websend_recipientLastName")
-	private WebElement recipientLastName;
 
 	@FindBy(id = "txt_websend_recipientCompany")
 	private WebElement recipientCompany;
@@ -57,9 +53,6 @@ public class SendFaxesPage {
 
 	@FindBy(id = "sel_websend_toCountry")
 	private WebElement toCountry;
-
-	@FindBy(id = "chk_addContact")
-	private WebElement selectContact;
 
 	@FindBy(id = "active_add_btn")
 	private WebElement add_btn;
@@ -107,25 +100,34 @@ public class SendFaxesPage {
 	@FindBy(xpath = "//div[@id='dialog_websendConfirmation']//img[@alt='close']")
 	private WebElement confirmation_close;
 	
+	String random = "";
+	String mode = "";
 	
 	public void sendfax(String senderid) throws Exception {
+		
+		Faker testdata = new Faker(Locale.JAPANESE);
 		random = senderid;
+		mode = "標準";		
+		String firstname = "QA" + testdata.address().firstName().toUpperCase().replace("'", "");
+		String lastname = testdata.address().lastName().toUpperCase().replace("'", "");
+		String email = firstname + "." + lastname + testdata.number().digits(3) + "@mailinator.com";
+		String phone = testdata.phoneNumber().cellPhone().toString();
+		String company = testdata.company().name();
+		String country = "アメリカ合衆国";
+		
 		Path folder = Paths.get((new java.io.File( "." )).getCanonicalPath(),"src/test/resources/sendrast");
 		Stream<Path> pathstream = Files.list(folder).filter(f->f.getFileName().toString().endsWith(".txt"));
-		attachments = Files.list(folder).filter(f->f.getFileName().toString().endsWith(".txt")).limit(1).map(f->f.toAbsolutePath().toString()).collect(Collectors.joining("|"));
+		String attachments = Files.list(folder).filter(f->f.getFileName().toString().endsWith(".txt")).limit(1).map(f->f.toAbsolutePath().toString()).collect(Collectors.joining("|"));
 		
-		setrecipientFirstName(random);
-		setrecipientLastName(random);
+		setrecipientName(firstname + " " + lastname);
 		setrecipientCompany(random);
 		settoCountry(country);
-		setfaxNumber(Config.DID_US);
-		setselectContact(true);
+		setfaxNumber(Config.DID_JP);
 		setaddContact();
 		setincludeCoverPage(true);
 		setfaxSubject(random);
 		setfaxBody(random);
 		setuploadFiles(attachments);
-		setreferenceId(random);
 		setsendReceipt(email);
 		setfaxMode(mode);
 		send();
@@ -147,11 +149,6 @@ public class SendFaxesPage {
 		//receipt.selectByVisibleText(text);
 		receipt.selectByIndex(0);
 		logger.info("Send Receipt field set to deafult first email.");
-	}
-
-	private void setreferenceId(String text) {
-		referenceId.sendKeys(text);
-		logger.info("reference Id field set to " + text);
 	}
 
 	private void setuploadFiles(String absolutepaths) {
@@ -194,13 +191,6 @@ public class SendFaxesPage {
 		}
 	}
 
-	private void setselectContact(boolean check) {
-		if (check && !selectContact.isSelected())
-			selectContact.click();
-		else if (!check && selectContact.isSelected())
-			selectContact.click();
-	}
-
 	private void settoCountry(String text) {
 		Select country = new Select(toCountry);
 		country.selectByVisibleText(text);
@@ -218,20 +208,15 @@ public class SendFaxesPage {
 		logger.info("Receipent Company field set to " + text);
 	}
 
-	private void setrecipientLastName(String text) {
-		recipientLastName.sendKeys(text);
-		logger.info("Recipient LastName field set to " + text);
-	}
-
-	private void setrecipientFirstName(String text) {
+	private void setrecipientName(String text) {
 		wait.until(ExpectedConditions.elementToBeClickable(recipientFirstName));
 		recipientFirstName.sendKeys(text);
 		logger.info("Recipient FirstName field set to " + text);
 	}
 	
-	public boolean confirmationVerify() {
+	public boolean confirmationVerify(String sender) {
 		
-		if (confirmation_sendto.getText().contains(random) && confirmation_subject.getText().contains(random) && confirmation_coverPage.getText().contains(random) && confirmation_faxQuality.getText().contains(mode))
+		if (confirmation_sendto.getText().contains(sender) && confirmation_subject.getText().contains(sender) && confirmation_coverPage.getText().contains(sender) && confirmation_faxQuality.getText().contains(mode))
 			return true;
 		else
 			return false;

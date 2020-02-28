@@ -57,7 +57,7 @@ public class AccountDetailsPage extends CommonMethods {
 	@FindBy(id = "tabs-profile")
 	private WebElement tabprofile;
 
-	@FindBy(xpath = "//*/div[contains(text(), 'Send Fax Options:')]/../*/a[text()='Edit']")
+	@FindBy(xpath = "//div[contains(text(),'送信ファックス オプション:')]/..//a")
 	private WebElement sendfaxoptionsedit;
 
 	@FindBy(id = "txt_sendCSID")
@@ -75,10 +75,10 @@ public class AccountDetailsPage extends CommonMethods {
 	@FindBy(id = "sel_defaultEmailAddress")
 	private WebElement defaultEmailAddress;
 
-	@FindBy(id = "lnkUsageActivityLogReceive")
+	@FindBy(id = "//*[contains(text(),'受信ファックス履歴:')]/..//a")
 	private WebElement lnkUsageActivityLogReceive;
 
-	@FindBy(id = "lnkUsageActivityLogSent")
+	@FindBy(xpath = "//*[contains(text(),'送信ファックス履歴:')]/..//a")
 	private WebElement lnkUsageActivityLogSent;
 
 	@FindBy(id = "receive_usageGrid")
@@ -87,8 +87,8 @@ public class AccountDetailsPage extends CommonMethods {
 	@FindBy(id = "send_usageGrid")
 	private WebElement send_usageGrid;
 
-	@FindBy(id = "btn_receiveLog")
-	private WebElement btn_receiveLog;
+	@FindBy(id = "btn_sendLog")
+	private List<WebElement> btn_receiveLog;
 
 	@FindBy(id = "btn_sendLog")
 	private WebElement btn_sendLog;
@@ -133,8 +133,8 @@ public class AccountDetailsPage extends CommonMethods {
 	}
 
 	public void clickReceiveGo() {
-		wait.until(ExpectedConditions.elementToBeClickable(btn_receiveLog));
-		btn_receiveLog.click();
+		wait.until(ExpectedConditions.elementToBeClickable(btn_receiveLog.get(1)));
+		btn_receiveLog.get(1).click();
 	}
 
 	public void clickSendGo() {
@@ -148,14 +148,16 @@ public class AccountDetailsPage extends CommonMethods {
 	private WebElement getExpectedReceiveRecordLog(String senderid) {
 		wait.until(ExpectedConditions
 				.invisibilityOfElementLocated(By.xpath("//div[@id='load_receive_usageGrid' and text()='Loading...']")));
-		if (receive_usageGrid.findElements(By.tagName("tr")).size() > 1)
+		if (receive_usageGrid.findElements(By.tagName("tr")).size() > 1) {
+			wait.until(ExpectedConditions.elementToBeClickable(receive_usageGrid));
 			for (WebElement element : receive_usageGrid
-					.findElements(By.xpath(".//tbody/tr[@class='ui-widget-content jqgrow ui-row-ltr']")))
+					.findElements(By.xpath(".//tbody/tr[@class='ui-widget-content jqgrow ui-row-ltr']"))) {
 				if (element.findElements(By.tagName("td")).get(4).getText().contains(senderid)) {
 					logger.info("Log record found.");
 					return element;
 				}
-
+			}
+		}
 		return null;
 	}
 
@@ -199,7 +201,8 @@ public class AccountDetailsPage extends CommonMethods {
 	private WebElement getExpectedSendRecordLog(String senderid) {
 		wait.until(ExpectedConditions
 				.invisibilityOfElementLocated(By.xpath("//div[@id='load_send_usageGrid' and text()='Loading...']")));
-		if (send_usageGrid.findElements(By.tagName("tr")).size() > 1)
+		if (send_usageGrid.findElements(By.tagName("tr")).size() > 1) {
+			wait.until(ExpectedConditions.elementToBeClickable(send_usageGrid));
 			for (WebElement element : send_usageGrid
 					.findElements(By.xpath(".//tbody/tr[@class='ui-widget-content jqgrow ui-row-ltr']"))) {
 				if (element.findElements(By.tagName("td")).get(4).getText().contains(senderid)) {
@@ -207,6 +210,7 @@ public class AccountDetailsPage extends CommonMethods {
 					return element;
 				}
 			}
+		}
 		return null;
 	}
 
@@ -247,6 +251,6 @@ public class AccountDetailsPage extends CommonMethods {
 	}
 
 	public void switchToReceiveLogs() {
-		driver.findElement(By.xpath("//a[text()='View Receive Logs']")).click();
+		driver.findElement(By.xpath("//a[text()='受信履歴を見る']")).click();
 	}
 }

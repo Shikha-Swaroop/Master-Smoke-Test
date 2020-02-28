@@ -57,13 +57,13 @@ public class ViewFaxesPage extends CommonMethods {
 		logger.info(driver.getTitle() + " - [" + driver.getCurrentUrl() + "]");
 	}
 
-	@FindBy(xpath = "//*/a/span[contains(text(),'INBOX ')]")
+	@FindBy(xpath = "//*/a/span[contains(text(),'受信トレイ')]")
 	private WebElement inbox;
 
-	@FindBy(xpath = "//*/a/span[text()='Sent']")
+	@FindBy(xpath = "//*/a/span[text()='送信済み']")
 	private WebElement sent;
 
-	@FindBy(xpath = "//*/a/span[text()='Trash'")
+	@FindBy(xpath = "//*/a/span[text()='ゴミ箱'")
 	private WebElement trash;
 
 	@FindBy(xpath = "//*[@id='messageCenter']//li[@class='x-tree-node']")
