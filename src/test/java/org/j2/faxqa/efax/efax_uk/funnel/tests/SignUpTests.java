@@ -39,8 +39,8 @@ public class SignUpTests extends BaseTest {
 
 		Faker testdata = new Faker();
 		String random = UUID.randomUUID().toString().replace("-", "").substring(0, 12);
-		String firstname = "QA" + testdata.address().firstName().toUpperCase();
-		String lastname = testdata.address().lastName().toUpperCase();
+		String firstname = "QA" + testdata.address().firstName().toUpperCase().replace("'", "");
+		String lastname = testdata.address().lastName().toUpperCase().replace("'", "");
 		String email = firstname + "." + lastname + testdata.number().digits(3) + "@mailinator.com";
 		String phone = testdata.phoneNumber().cellPhone().toString();
 		String address1 = new Faker().address().buildingNumber();

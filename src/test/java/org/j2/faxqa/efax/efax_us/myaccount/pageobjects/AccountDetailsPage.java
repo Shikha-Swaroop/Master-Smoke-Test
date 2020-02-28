@@ -9,6 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestContext;
 
 //import com.google.common.*;
@@ -19,7 +20,9 @@ import java.io.FileFilter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collector;
@@ -86,6 +89,12 @@ public class AccountDetailsPage extends CommonMethods {
 
 	@FindBy(id = "send_usageGrid")
 	private WebElement send_usageGrid;
+	
+	@FindBy(id = "date_sendToDate")
+	private WebElement date_sendToDate;
+
+	@FindBy(id = "date_receiveToDate")
+	private WebElement date_receiveToDate;	
 
 	@FindBy(id = "btn_receiveLog")
 	private WebElement btn_receiveLog;
@@ -160,6 +169,7 @@ public class AccountDetailsPage extends CommonMethods {
 	}
 
 	public boolean isReceiveActivityLogFound(String senderid, int timeout) throws InterruptedException {
+		setReceiveDate();
 		clickReceiveGo();
 
 		wait.until(ExpectedConditions
@@ -213,6 +223,7 @@ public class AccountDetailsPage extends CommonMethods {
 	public boolean isSendActivityLogFound(String senderid, int timeout) throws InterruptedException {
 		clickUsageTab();
 		clickSendActivityDetails();
+		setSendDate();
 		clickSendGo();
 		wait.until(ExpectedConditions
 				.invisibilityOfElementLocated(By.xpath("//div[@id='load_send_usageGrid' and text()='Loading...']")));
@@ -236,6 +247,16 @@ public class AccountDetailsPage extends CommonMethods {
 
 	}
 
+	private void setSendDate() {
+		String today = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
+		((JavascriptExecutor)this.driver).executeScript("document.getElementById('date_sendToDate').value = '"+ today +"';", date_sendToDate);	
+	}
+
+	private void setReceiveDate() {
+		String today = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
+		((JavascriptExecutor)this.driver).executeScript("document.getElementById('date_receiveToDate').value = '"+ today +"';", date_receiveToDate);	
+	}
+	
 	public void printSendActivityLog1(WebElement log) {
 		logger.info("Expected fax received successfully.");
 		logger.info("Date = " + log.findElements(By.tagName("td")).get(0).getText());

@@ -1,6 +1,7 @@
 package org.j2.faxqa.efax.efax_jp.funnel.pageobjects;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,6 +12,8 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.ITestContext;
+
+import com.github.javafaker.Faker;
 
 import net.bytebuddy.dynamic.DynamicType.Builder.MethodDefinition.ExceptionDefinition;
 
@@ -48,321 +51,270 @@ public class SignUpPage {
 		logger.info(driver.getTitle() + " - [" + driver.getCurrentUrl() + "]");
 	}
 
-	@FindBy(id = "ddlChooseNumberCountryRed")
-	private WebElement ddlChooseNumberCountryRed;
+	@FindBy(id = "ddlChooseNumberCountryibjp")
+	private WebElement ddlChooseNumberCountryibjp;
 
-	@FindBy(xpath = "//input[@value='Area Code']")
-	private WebElement radioAreaCode;
+	@FindBy(id = "ddlChooseNumberSearchAreaCodeibjp")
+	private WebElement ddlChooseNumberSearchAreaCodeibjp;
 
-	@FindBy(id = "txtChooseNumberByAreaCode")
-	private WebElement txtChooseNumberByAreaCode;
+	@FindBy(id = "lstDidNumbersibjp")
+	private WebElement lstDidNumbersibjp;
 
-	@FindBy(id = "hyplinkChooseNumberGoAreaCode")
-	private WebElement hyplinkChooseNumberGoAreaCode;
+	@FindBy(id = "btnChooseNumberSubmitibjp")
+	private WebElement btnChooseNumberSubmitibjp;
 
-	@FindBy(xpath = "//input[@value='State']")
-	private WebElement radioState;
+	@FindBy(id = "rdoAccept")
+	private WebElement rdoAccept;
+	
+	@FindBy(id = "btncontinueenable")
+	private WebElement btncontinueenable;
+	
+	@FindBy(id = "txtEmailAddressJP")
+	private WebElement txtEmailAddressJP;
+	
+	@FindBy(id = "txtConfirmEmailAddressJP")
+	private WebElement txtConfirmEmailAddressJP;
+	
+	@FindBy(id = "txtLastNameJP")
+	private WebElement txtLastNameJP;
 
-	@FindBy(id = "ddlChooseNumberState")
-	private WebElement ddlChooseNumberState;
+	@FindBy(id = "txtFirstNameJP")
+	private WebElement txtFirstNameJP;
+	
+	@FindBy(id = "ddlCountryBillingjp")
+	private WebElement ddlCountryBillingjp;
+	
+	@FindBy(id = "txtZipCodeBillingjp1")
+	private WebElement txtZipCodeBillingjp1;
 
-	@FindBy(id = "ddlChooseNumberCity")
-	private WebElement ddlChooseNumberCity;
+	@FindBy(id = "txtZipCodeBillingjp2")
+	private WebElement txtZipCodeBillingjp2;
 
-	@FindBy(id = "chooseNumberMultiColumn")
-	private WebElement chooseNumberMultiColumn;
+	@FindBy(id = "ddlStateBillingjp")
+	private WebElement ddlStateBillingjp;
 
-	@FindBy(id = "btnChooseNumberSubmit")
-	private WebElement btnChooseNumberSubmit;
+	@FindBy(id = "txtAddress1Billingjp")
+	private WebElement txtAddress1Billingjp;
 
-	@FindBy(id = "noInventory")
-	private WebElement noInventory;
+	@FindBy(id = "txtAddress2Billingjp")
+	private WebElement txtAddress2Billingjp;
 
-	@FindBy(id = "txtFirstName")
-	private WebElement txtFirstName;
-
-	@FindBy(id = "txtLastName")
-	private WebElement txtLastName;
-
-	@FindBy(id = "txtEmailAddress")
-	private WebElement txtEmailAddress;
-
-	@FindBy(id = "btnAbandonedUser")
-	private WebElement btnAbandonedUser;
-
-	@FindBy(id = "txtCreditCardNameBillingdomestic")
-	private WebElement txtCreditCardNameBillingdomestic;
-
-	@FindBy(id = "txtPhoneNumber")
-	private WebElement txtPhoneNumber;
-
-	@FindBy(id = "txtAddress1Billingdomestic")
-	private WebElement txtAddress1Billingdomestic;
-
-	@FindBy(id = "txtAddress2Billingdomestic")
-	private WebElement txtAddress2Billingdomestic;
-
-	@FindBy(id = "txtCityBillingdomestic")
-	private WebElement txtCityBillingdomestic;
-
-	@FindBy(id = "ddlStateBillingdomestic")
-	private WebElement ddlStateBillingdomestic;
-
-	@FindBy(id = "txtZipCodeBillingdomestic")
-	private WebElement txtZipCodeBillingdomestic;
-
-	@FindBy(id = "ddlCountryBillingdomestic")
-	private WebElement ddlCountryBillingdomestic;
-
-	@FindBy(id = "ltrSelectCardTypeBillingdomestic")
-	private WebElement ltrSelectCardTypeBillingdomestic;
-
+	@FindBy(id = "txtCompanynamejp")
+	private WebElement txtCompanynamejp;
+	
+	@FindBy(id = "txtPhoneNumberBillingjp")
+	private WebElement txtPhoneNumberBillingjp;
+	
 	@FindBy(id = "rad_VISA")
 	private WebElement rad_VISA;
 
-	@FindBy(id = "txtCreditCardBillingdomestic")
-	private WebElement txtCreditCardBillingdomestic;
+	@FindBy(id = "txtCreditCardBillingjp")
+	private WebElement txtCreditCardBillingjp;
 
-	@FindBy(id = "ddlMonthBillingdomestic")
-	private WebElement ddlMonthBillingdomestic;
+	@FindBy(id = "txtCVVBillingjp")
+	private WebElement txtCVVBillingjp;
+	
+	@FindBy(id = "ddlMonthBillingjp")
+	private WebElement ddlMonthBillingjp;
 
-	@FindBy(id = "ddlYearBillingdomestic")
-	private WebElement ddlYearBillingdomestic;
+	@FindBy(id = "ddlYearBillingjp")
+	private WebElement ddlYearBillingjp;
 
-	@FindBy(id = "txtCVVBillingdomestic")
-	private WebElement txtCVVBillingdomestic;
+	@FindBy(id = "lnkBillingiSubmitjp")
+	private WebElement lnkBillingiSubmitjp;
+	
+	@FindBy(id = "lnkBillingConfirmSubmitJP")
+	private WebElement lnkBillingConfirmSubmitJP;
+	
+	@FindBy(id = "confirm")
+	private WebElement confirm;
+	
+	@FindBy(id = "btnLogin")
+	private WebElement btnLogin;
 
-	@FindBy(id = "chkAgreementBillingdomestic")
-	private WebElement chkAgreementBillingdomestic;
-
-	@FindBy(id = "btnBillingSubmitEnableBillingdomestic")
-	private WebElement btnBillingSubmitEnableBillingdomestic;
-
-	@FindBy(id = "error-msg_billingdomestic")
-	private WebElement error_msg_billingdomestic;
-
-	@FindBy(id = "lbleFaxNumberTitle")
-	private WebElement lbleFaxNumberTitle;
-
-	@FindBy(id = "lbleFaxNumberValue")
-	private WebElement lbleFaxNumberValue;
-
-	@FindBy(id = "lblPasswordValue")
-	private WebElement lblPasswordValue;
-
-	@FindBy(id = "BtnLogin")
-	private WebElement BtnLogin;
-
-	public String setCity() {
-		wait.until(ExpectedConditions.elementToBeClickable(ddlChooseNumberCity));
-		Select selection = new Select(ddlChooseNumberCity);
-		selection.selectByIndex(ThreadLocalRandom.current().nextInt(1, selection.getOptions().size()));
-		String city = selection.getFirstSelectedOption().getText();
-		logger.info("Setting City to - " + city);
-		return city;
-	}
-
-	public String setState() throws InterruptedException {
-		wait.until(ExpectedConditions.elementToBeClickable(ddlChooseNumberState));
-		Select selection = new Select(ddlChooseNumberState);
-		selection.selectByIndex(ThreadLocalRandom.current().nextInt(1, selection.getOptions().size()));
-		String state = selection.getFirstSelectedOption().getText();
-		logger.info("Setting State to - " + state);
-		return state;
-	}
-
-	public void selectState() {
-		wait.until(ExpectedConditions.elementToBeClickable(radioState));
-		logger.info("Chosing to look for faxnumbers by State");
-		radioState.click();
-	}
-
+	@FindBy(id = "logout")
+	private WebElement logout;
+	
+	
 	public void selectCountry(String text) {
-		wait.until(ExpectedConditions.elementToBeClickable(ddlChooseNumberCountryRed));
-		Select selection = new Select(ddlChooseNumberCountryRed);
+		wait.until(ExpectedConditions.elementToBeClickable(ddlChooseNumberCountryibjp));
+		Select selection = new Select(ddlChooseNumberCountryibjp);
 		selection.selectByVisibleText(text);
 		logger.info("Setting faxnumber country to - " + text);
 	}
 
 	public void selectAreaCode() {
-		wait.until(ExpectedConditions.elementToBeClickable(radioAreaCode));
-		radioAreaCode.click();
-		logger.info("Going by AreaCodes");
+		wait.until(ExpectedConditions.elementToBeClickable(ddlChooseNumberSearchAreaCodeibjp));
+		Select selection = new Select(ddlChooseNumberSearchAreaCodeibjp);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='ddlChooseNumberSearchAreaCodeibjp']/option[1][text()='市外局番を選択してください']")));
+		int i = new Faker().number().numberBetween(1, selection.getOptions().size());
+		selection.selectByIndex(i);
+		String acrea = selection.getFirstSelectedOption().getText();
+		logger.info("Setting SearchAreaCode to - " + acrea);
 	}
 
-	public boolean noInventory() {
-		wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("loading_ChooseNumber")));
-		if (noInventory.isDisplayed()) {
-			logger.info(noInventory.getText());
-			return true;
-		}
-		return false;
-	}
-
-	public void enterAreaCode(String text) {
-		wait.until(ExpectedConditions.elementToBeClickable(txtChooseNumberByAreaCode));
-		txtChooseNumberByAreaCode.clear();
-		txtChooseNumberByAreaCode.sendKeys(text);
-		hyplinkChooseNumberGoAreaCode.click();
-		logger.info("Area Code set to - " + text);
+	public boolean anyFaxNumbers() {
+		return driver.findElements((By.xpath("//*[@id='lstDidNumbersibjp']//input"))).size() > 0;
 	}
 
 	public String selectDIDNumber() {
 		String did = "";
-		wait.until(ExpectedConditions.visibilityOfAllElements(chooseNumberMultiColumn));
-		chooseNumberMultiColumn.findElements(By.tagName("input")).get(0).click();
-		did = chooseNumberMultiColumn.findElements(By.tagName("input")).get(0).getAttribute("data-val");
-		logger.info("Picked-up faxnumber from available numbers - " + did);
+		wait.until(ExpectedConditions.visibilityOfAllElements(lstDidNumbersibjp));
+		lstDidNumbersibjp.findElements(By.tagName("input")).get(0).click();
+		did = lstDidNumbersibjp.findElements(By.tagName("input")).get(0).getAttribute("data-val");
+		logger.info("Picked a faxnumber from available numbers - " + did);
 		return did;
 	}
 
-	public void proceedNext() {
-		btnChooseNumberSubmit.click();
+	public void proceedNext1() {
+		btnChooseNumberSubmitibjp.click();
 		logger.info("Continuing further with Sign-Up");
 	}
 
+	public void proceedNext2() {
+		btncontinueenable.click();
+		logger.info("Continuing further with Sign-Up");
+	}
+	
+	public void setEmail(String text) {
+		txtEmailAddressJP.click();
+		txtEmailAddressJP.clear();
+		txtEmailAddressJP.sendKeys(text);
+		logger.info("eMail set to - " + text);
+	}
+	
+	public void confirmEmail(String text) {
+		txtConfirmEmailAddressJP.click();
+		txtConfirmEmailAddressJP.clear();
+		txtConfirmEmailAddressJP.sendKeys(text);
+		logger.info("eMail set to - " + text);
+	}
+	
 	public void setFirstName(String text) {
-		txtFirstName.clear();
-		txtFirstName.sendKeys(text);
+		txtFirstNameJP.click();
+		txtFirstNameJP.clear();
+		txtFirstNameJP.sendKeys(text);
 		logger.info("FirstName set to - " + text);
 	}
 
 	public void setLastName(String text) {
-		txtLastName.clear();
-		txtLastName.sendKeys(text);
+		txtLastNameJP.click();
+		txtLastNameJP.clear();
+		txtLastNameJP.sendKeys(text);
 		logger.info("LastName set to - " + text);
 	}
 
-	public void setEmail(String text) {
-		txtEmailAddress.clear();
-		txtEmailAddress.sendKeys(text);
-		logger.info("eMail set to - " + text);
-	}
-
-	public void proceedToBilling() {
-		wait.until(ExpectedConditions.elementToBeClickable(btnAbandonedUser));
-		btnAbandonedUser.click();
-		logger.info("Continuig further to Billing...");
-	}
-
-	public void setBillingCardName(String text) {
-		wait.until(ExpectedConditions.elementToBeClickable(txtCreditCardNameBillingdomestic));
-		txtCreditCardNameBillingdomestic.clear();
-		txtCreditCardNameBillingdomestic.sendKeys(text);
-		logger.info("BillingCardName set to - " + text);
-	}
-
-	public void setBillingPhoneNumber(String text) {
-		txtPhoneNumber.clear();
-		txtPhoneNumber.sendKeys(text);
-		logger.info("BillingPhoneNumber set to - " + text);
-	}
-
-	public void setBillingAddress1(String text) {
-		txtAddress1Billingdomestic.clear();
-		txtAddress1Billingdomestic.sendKeys(text);
-		logger.info("BillingAddress1 set to - " + text);
-	}
-
-	public void setBillingAddress2(String text) {
-		txtAddress2Billingdomestic.clear();
-		txtAddress2Billingdomestic.sendKeys(text);
-		logger.info("BillingAddress2 set to - " + text);
-	}
-
-	public void setBillingCity(String text) {
-		txtCityBillingdomestic.clear();
-		txtCityBillingdomestic.sendKeys(text);
-		logger.info("BillingCity set to - " + text);
-	}
-
-	public void setBillingState(String text) {
-		wait.until(ExpectedConditions.elementToBeClickable(ddlStateBillingdomestic));
-		if (ddlStateBillingdomestic.isEnabled()) {
-			Select selection = new Select(ddlStateBillingdomestic);
-			selection.selectByVisibleText(text);
-			logger.info("BillingState set to - " + text);
-		} else
-			logger.info("BillingState disabled.");
-	}
-
-	public void setBillingPostalCode(String text) {
-		txtZipCodeBillingdomestic.clear();
-		txtZipCodeBillingdomestic.sendKeys(text);
-		logger.info("BillingPostalCode set to - " + text);
-	}
-
 	public void setBillingCountry(String text) {
-		Select selection = new Select(ddlCountryBillingdomestic);
+		Select selection = new Select(ddlCountryBillingjp);
 		selection.selectByVisibleText(text);
 		logger.info("BillingCountry set to - " + text);
 	}
 
+	public void setBillingZipCode1(String text) {
+		txtZipCodeBillingjp1.click();
+		txtZipCodeBillingjp1.clear();
+		txtZipCodeBillingjp1.sendKeys(text);
+		logger.info("ZipCode 1 set to - " + text);
+	}
+
+	public void setBillingZipCode2(String text) {
+		txtZipCodeBillingjp2.click();
+		txtZipCodeBillingjp2.clear();
+		txtZipCodeBillingjp2.sendKeys(text);
+		logger.info("ZipCode 2 set to - " + text);
+	}
+	
+	public void setBillingState() {
+		wait.until(ExpectedConditions.elementToBeClickable(ddlStateBillingjp));
+		Select selection = new Select(ddlStateBillingjp);
+		selection.selectByIndex(ThreadLocalRandom.current().nextInt(1, selection.getOptions().size()));
+		String state = selection.getFirstSelectedOption().getText();
+		logger.info("Setting SearchAreaCode to - " + state);
+	}
+	
+	public void setBillingAddress1(String text) {
+		txtAddress1Billingjp.click();
+		txtAddress1Billingjp.clear();
+		txtAddress1Billingjp.sendKeys(text);
+		logger.info("Address 1 set to - " + text);
+	}
+
+	public void setBillingAddress2(String text) {
+		txtAddress2Billingjp.click();
+		txtAddress2Billingjp.clear();
+		txtAddress2Billingjp.sendKeys(text);
+		logger.info("Address 2 set to - " + text);
+	}
+	
+	public void setCompanyName(String text) {
+		txtCompanynamejp.click();
+		txtCompanynamejp.clear();
+		txtCompanynamejp.sendKeys(text);
+		logger.info("Company name set to - " + text);
+	}
+	
+	public void setBillingPhoneNumber(String text) {
+		txtPhoneNumberBillingjp.click();
+		txtPhoneNumberBillingjp.clear();
+		txtPhoneNumberBillingjp.sendKeys(text);
+		logger.info("BillingPhoneNumber set to - " + text);
+	}
+	
 	public void setBillingCardTypeVisa() {
 		rad_VISA.click();
 		logger.info("Setting CardType to - " + rad_VISA.getAttribute("value"));
 	}
-
+	
 	public void setBillingCreditCardNumber(String text) {
-		txtCreditCardBillingdomestic.clear();
-		txtCreditCardBillingdomestic.sendKeys(text);
+		txtCreditCardBillingjp.click();
+		txtCreditCardBillingjp.clear();
+		txtCreditCardBillingjp.sendKeys(text);
 		logger.info("Setting CardNumber to - " + text);
 	}
-
+	
+	public void setBillingCreditCardCVV(String text) {
+		txtCVVBillingjp.click();
+		txtCVVBillingjp.clear();
+		txtCVVBillingjp.sendKeys(text);
+		logger.info("Setting CardCVV to  - " + text);
+	}
+	
 	public void setBillingCreditCardMonth(String text) {
-		Select selection = new Select(ddlMonthBillingdomestic);
-		selection.selectByVisibleText(text);
+		Select selection = new Select(ddlMonthBillingjp);
+		selection.selectByIndex(11);
 		logger.info("Setting CardExpiringMonth to  - " + text);
 	}
 
 	public void setBillingCreditCardYear(String text) {
-		Select selection = new Select(ddlYearBillingdomestic);
+		Select selection = new Select(ddlYearBillingjp);
 		selection.selectByVisibleText(text);
 		logger.info("Setting CardExpiringYear to  - " + text);
 	}
 
-	public void setBillingCreditCardCVV(String text) {
-		txtCVVBillingdomestic.clear();
-		txtCVVBillingdomestic.sendKeys(text);
-		logger.info("Setting CardCVV to  - " + text);
-	}
-
-	public void agreeToTermsConditions() {
-		chkAgreementBillingdomestic.click();
-		logger.info("Agreeing to Terms & Conditions");
-	}
-
 	public void activateAccount() {
-		btnBillingSubmitEnableBillingdomestic.click();
+		lnkBillingConfirmSubmitJP.click();
 		logger.info("Attempting to Activate Account");
 	}
 
+	public void proceedNext3() {
+		lnkBillingiSubmitjp.click();
+		logger.info("Proceeding Next");
+	}
+	
 	public boolean isSignUpSuccess() {
-		wait.until(ExpectedConditions.visibilityOf(lbleFaxNumberValue));
-		wait.until(ExpectedConditions.visibilityOf(lblPasswordValue));
-		if (lbleFaxNumberValue.isDisplayed() && lblPasswordValue.isDisplayed()) {
-			logger.info(String.format("Registration successful - FaxNumber=%1$s Password=%2$s", lbleFaxNumberValue.getText(), lblPasswordValue.getText()));
+		if (driver.findElements(By.id("btnLogin")).size() > 0) {
+			logger.info(String.format("Registration successful"));
 			return true;
 		} else {
 			logger.info("Registration un-successful.");
 			return false;
 		}
 	}
-	
-	public String getLoginDetails()
-	{
-		return lbleFaxNumberValue.getText() + ";" + lblPasswordValue.getText();	
-	}
 
-	public boolean isLoginBtnAvailable() {
-		wait.until(ExpectedConditions.elementToBeClickable(BtnLogin));
-		boolean flag = BtnLogin.isDisplayed();
-		return flag;
-	}
 
 	public void clickLogin() {
 		logger.info("Attempting Auto log-in.");
-		BtnLogin.click();
+		driver.findElement(By.id("btnLogin")).click();
 	}
 
 	public boolean isLoggedIn() {
@@ -379,7 +331,7 @@ public class SignUpPage {
 		logger.info("Signing-in with credentials.");
 		driver.findElement(By.id("phoneNumber")).sendKeys(faxnumber);
 		driver.findElement(By.id("pin")).sendKeys(pin);
-		driver.findElement(By.id("loginSubmitBtn")).click();
+		driver.findElement(By.xpath("//*[@id='loginForm']//input[@value='Submit']")).click();
 	}
 
 	public boolean logout() {
@@ -391,5 +343,16 @@ public class SignUpPage {
 			logger.info("Sign-out unsuccessful.");
 			return false;
 		}
+	}
+
+	public void acceptTerms() {
+		wait.until(ExpectedConditions.elementToBeClickable(rdoAccept));
+		this.scrollToTheSpecificWebelement(rdoAccept);
+		rdoAccept.click();
+		
+	}
+	
+	public void scrollToTheSpecificWebelement(WebElement element) {
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
 	}
 }

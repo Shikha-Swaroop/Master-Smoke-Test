@@ -72,19 +72,19 @@ public class SendfaxTests extends BaseTest {
 		homepage = new HomePage();
 		homepage.gotoacctdetailsview();
 		acctdetailspage = new AccountDetailsPage();
-		flag = acctdetailspage.isSendActivityLogFound(senderid, 60);
-		// Assert.assertTrue(flag);
+		flag = acctdetailspage.isSendActivityLogFound(senderid, 300);
+		Assert.assertTrue(flag);
 
 		acctdetailspage.switchToReceiveLogs();
 		acctdetailspage = new AccountDetailsPage();
-		flag = acctdetailspage.isReceiveActivityLogFound(senderid, 60);
-		// Assert.assertTrue(flag);
+		flag = acctdetailspage.isReceiveActivityLogFound(senderid, 300);
+		Assert.assertTrue(flag);
 
 		NavigationBar navigate = new NavigationBar();
 		navigate.clickViewFaxesTab();
 
 		ViewFaxesPage viewfaxespage = new ViewFaxesPage();
-		flag = viewfaxespage.isFaxReceived(senderid, 60);
+		flag = viewfaxespage.isFaxReceived(senderid, 300);
 		Assert.assertTrue(flag);
 
 	}
