@@ -5,9 +5,8 @@ import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.j2.faxqa.efax.common.Config;
+import org.j2.faxqa.efax.common.BasePage;
 import org.j2.faxqa.efax.common.TLDriverFactory;
-import org.j2.faxqa.efax.corporate.admin.CommonMethods;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,7 +17,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.github.javafaker.Faker;
 
-public class AddFaxNumbersOverlay extends CommonMethods {
+public class AddFaxNumbersOverlay extends BasePage {
 
 	private WebDriver driver;
 	private Logger logger;

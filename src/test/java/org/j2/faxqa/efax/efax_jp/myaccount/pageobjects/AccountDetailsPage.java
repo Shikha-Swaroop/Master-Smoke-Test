@@ -1,7 +1,6 @@
 package org.j2.faxqa.efax.efax_jp.myaccount.pageobjects;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,30 +8,18 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.ITestContext;
+
 
 //import com.google.common.*;
 //import com.google.common.io.Files;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.math3.analysis.function.Exp;
 import org.apache.logging.log4j.*;
-import org.j2.faxqa.efax.common.Config;
+import org.j2.faxqa.efax.common.BasePage;
 import org.j2.faxqa.efax.common.TLDriverFactory;
-import org.j2.faxqa.efax.corporate.myaccount.CommonMethods;
 
-public class AccountDetailsPage extends CommonMethods {
+public class AccountDetailsPage extends BasePage {
 	private WebDriver driver;
 	private Logger logger;
 	WebDriverWait wait;
@@ -57,7 +44,7 @@ public class AccountDetailsPage extends CommonMethods {
 	@FindBy(id = "tabs-profile")
 	private WebElement tabprofile;
 
-	@FindBy(xpath = "//div[contains(text(),'送信ファックス オプション:')]/..//a")
+	@FindBy(xpath = "//div[contains(text(),'é€�ä¿¡ãƒ•ã‚¡ãƒƒã‚¯ã‚¹ ã‚ªãƒ—ã‚·ãƒ§ãƒ³:')]/..//a")
 	private WebElement sendfaxoptionsedit;
 
 	@FindBy(id = "txt_sendCSID")
@@ -75,10 +62,10 @@ public class AccountDetailsPage extends CommonMethods {
 	@FindBy(id = "sel_defaultEmailAddress")
 	private WebElement defaultEmailAddress;
 
-	@FindBy(id = "//*[contains(text(),'受信ファックス履歴:')]/..//a")
+	@FindBy(id = "//*[contains(text(),'å�—ä¿¡ãƒ•ã‚¡ãƒƒã‚¯ã‚¹å±¥æ­´:')]/..//a")
 	private WebElement lnkUsageActivityLogReceive;
 
-	@FindBy(xpath = "//*[contains(text(),'送信ファックス履歴:')]/..//a")
+	@FindBy(xpath = "//*[contains(text(),'é€�ä¿¡ãƒ•ã‚¡ãƒƒã‚¯ã‚¹å±¥æ­´:')]/..//a")
 	private WebElement lnkUsageActivityLogSent;
 
 	@FindBy(id = "receive_usageGrid")
@@ -251,6 +238,6 @@ public class AccountDetailsPage extends CommonMethods {
 	}
 
 	public void switchToReceiveLogs() {
-		driver.findElement(By.xpath("//a[text()='受信履歴を見る']")).click();
+		driver.findElement(By.xpath("//a[text()='å�—ä¿¡å±¥æ­´ã‚’è¦‹ã‚‹']")).click();
 	}
 }

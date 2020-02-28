@@ -28,11 +28,11 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.math3.analysis.function.Exp;
 import org.apache.logging.log4j.*;
+import org.j2.faxqa.efax.common.BaseTest;
 import org.j2.faxqa.efax.common.Config;
 import org.j2.faxqa.efax.common.TLDriverFactory;
-import org.j2.faxqa.efax.corporate.myaccount.CommonMethods;
 
-public class AccountDetailsPage extends CommonMethods {
+public class AccountDetailsPage extends BaseTest {
 	private WebDriver driver;
 	private Logger logger;
 	WebDriverWait wait;

@@ -50,6 +50,11 @@ public class Config {
 	public static String microsites_PIN;
 	public static String microsites_creditCard;
 	
+	/* efax microsites related config*/ 
+	public static String corp_myaccountBaseUrl;
+	public static String corp_DID;
+	public static String corp_password;
+	
 	/*
 	 * Add following entries to your host file
 	 * (C:\Windows\System32\drivers\etc\hosts) 

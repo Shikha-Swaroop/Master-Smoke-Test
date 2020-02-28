@@ -11,10 +11,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.github.javafaker.Faker;
 
 import org.apache.logging.log4j.*;
+import org.j2.faxqa.efax.common.BasePage;
 import org.j2.faxqa.efax.common.TLDriverFactory;
-import org.j2.faxqa.efax.efax_uk.funnel.CommonMethods;
 
-public class SignUpPage extends CommonMethods {
+public class SignUpPage extends BasePage {
 	private WebDriver driver;
 	private Logger logger;
 	WebDriverWait wait;

@@ -87,6 +87,9 @@ public class EnvironmentSetup extends org.testng.Reporter {
 		Config.microsites_PIN = prop.getProperty("microsites_PIN");
 		Config.microsites_creditCard = prop.getProperty("microsites_CreditCard");
 		
+		Config.corp_myaccountBaseUrl = prop.getProperty("corp_myaccountBaseUrl");
+		Config.corp_DID = prop.getProperty("corp_DID");
+		Config.corp_password = prop.getProperty("corp_password");
 		
 		//********************** Corporate **************************************//
 		

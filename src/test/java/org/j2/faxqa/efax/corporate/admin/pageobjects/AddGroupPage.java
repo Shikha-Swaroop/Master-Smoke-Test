@@ -2,8 +2,8 @@ package org.j2.faxqa.efax.corporate.admin.pageobjects;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.j2.faxqa.efax.common.BasePage;
 import org.j2.faxqa.efax.common.TLDriverFactory;
-import org.j2.faxqa.efax.corporate.admin.CommonMethods;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,7 +11,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class AddGroupPage extends CommonMethods {
+public class AddGroupPage extends BasePage {
 
 	private WebDriver driver;
 	private Logger logger;
@@ -109,7 +109,7 @@ public class AddGroupPage extends CommonMethods {
 	}
 
 	public void clickGetBtnCreateGroup() {
-		new CommonMethods().scrollToTheSpecificWebelement(btnCreateGroupWebElement);
+		scrollToTheSpecificWebelement(btnCreateGroupWebElement);
 		btnCreateGroupWebElement.click();
 		logger.info("Creating group.");
 	}
@@ -136,7 +136,7 @@ public class AddGroupPage extends CommonMethods {
 					By.xpath("//div[contains(@class,'edit-groups-tree-view-holder')]//ul//a[contains(text(),'"
 							+ SubGrpName + "')]"));
 			// Reporter.elementIsAvailableOnWebPage(locator);
-			this.scrollToTheSpecificWebelement(element);
+			scrollToTheSpecificWebelement(element);
 			element.click();
 		} catch (Exception e) {
 			// Reporter.elementIsNotAvailableOnWebPage(locator);

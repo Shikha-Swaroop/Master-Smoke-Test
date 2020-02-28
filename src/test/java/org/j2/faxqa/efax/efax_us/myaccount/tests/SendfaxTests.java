@@ -1,20 +1,12 @@
 package org.j2.faxqa.efax.efax_us.myaccount.tests;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.UUID;
-
-import javax.management.RuntimeErrorException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.j2.faxqa.efax.common.BaseTest;
 import org.j2.faxqa.efax.common.Config;
 import org.j2.faxqa.efax.common.TLDriverFactory;
-import org.j2.faxqa.efax.common.TestExecutionListener;
-import org.j2.faxqa.efax.common.TestNGReportListener;
 import org.j2.faxqa.efax.common.TestRail;
 import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.AccountDetailsPage;
 import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.HomePage;
@@ -26,7 +18,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.ITestContext;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 //@Listeners({TestExecutionListener.class, TestNGReportListener.class})

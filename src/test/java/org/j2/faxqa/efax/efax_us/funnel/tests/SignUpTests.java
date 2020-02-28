@@ -25,8 +25,8 @@ public class SignUpTests extends BaseTest {
 	// If uploadresults=true, then the results get uploaded to location
 	// https://testrail.test.j2noc.com/
 
-	@TestRail(id = "C7862")
-	@Test(enabled = true, groups = { "smoke", "regression" }, priority = 1, description = "Sing up Funnel > Validate successful end to end registration")
+	@TestRail(id = "C8536")
+	@Test(enabled = true, groups = { "smoke" }, priority = 1, description = "eFax > US > Funnel > My Account > Validate Account Registration is Successful & Login to My Account without issues")
 	public void verifyNewUserSignUpLogin(ITestContext context) throws Exception {
 		WebDriver driver = null;
 

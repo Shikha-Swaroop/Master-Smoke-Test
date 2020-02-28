@@ -1,7 +1,5 @@
 package org.j2.faxqa.efax.efax_jp.myaccount.pageobjects;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,22 +7,15 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.ITestContext;
-
 import com.github.javafaker.Faker;
 
-import java.io.File;
-import java.io.FileFilter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Locale;
-import java.util.UUID;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.logging.log4j.*;
 import org.j2.faxqa.efax.common.Config;
 import org.j2.faxqa.efax.common.TLDriverFactory;
@@ -107,13 +98,13 @@ public class SendFaxesPage {
 		
 		Faker testdata = new Faker(Locale.JAPANESE);
 		random = senderid;
-		mode = "標準";		
+		mode = "æ¨™æº–";		
 		String firstname = "QA" + testdata.address().firstName().toUpperCase().replace("'", "");
 		String lastname = testdata.address().lastName().toUpperCase().replace("'", "");
 		String email = firstname + "." + lastname + testdata.number().digits(3) + "@mailinator.com";
 		String phone = testdata.phoneNumber().cellPhone().toString();
 		String company = testdata.company().name();
-		String country = "アメリカ合衆国";
+		String country = "ã‚¢ãƒ¡ãƒªã‚«å�ˆè¡†å›½";
 		
 		Path folder = Paths.get((new java.io.File( "." )).getCanonicalPath(),"src/test/resources/sendrast");
 		Stream<Path> pathstream = Files.list(folder).filter(f->f.getFileName().toString().endsWith(".txt"));

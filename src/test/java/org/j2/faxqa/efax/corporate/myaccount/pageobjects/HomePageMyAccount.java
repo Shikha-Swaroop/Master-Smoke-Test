@@ -3,7 +3,6 @@ package org.j2.faxqa.efax.corporate.myaccount.pageobjects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.j2.faxqa.efax.common.TLDriverFactory;
-import org.j2.faxqa.efax.corporate.myaccount.CommonMethods;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

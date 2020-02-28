@@ -93,16 +93,12 @@ public class BasePage {
 		return path;
 	}
 
-	public String getWelcomeEmail(String email, int timeout) {
+	public String getWelcomeEmail(String email, String subject, int timeout) {
 		WebDriver driver = TLDriverFactory.getTLDriver();
-		driver.navigate().to("https://www.mailinator.com/v3/index.jsp?zone=public&query=<email>#/#msgpane"
-				.replace("<email>", email.split("@")[0]));
-		driver.findElement(
-				By.xpath("//table/tbody/tr/td[4]/a[contains(text(), 'Your eFax Group Administrator Information')]"))
-				.click();
-		return driver.findElement(By.xpath(
-				"//p[contains(.,'Account Number:') and contains(.,'User Name:') and contains(.,'Password:')]/.."))
-				.getText();
+		driver.navigate().to("https://www.mailinator.com/v3/index.jsp?zone=public&query=<email>#/#msgpane".replace("<email>", email.split("@")[0]));
+		driver.findElement(By.xpath("//table/tbody/tr/td[4]/a[contains(text(), '" + subject + "')]")).click();
+		driver.findElement(By.xpath("//*[@id='parts_buttons']/button[1]")).click();
+		return driver.switchTo().frame("msg_body").findElement(By.tagName("body")).getText();
 	}
 
 }

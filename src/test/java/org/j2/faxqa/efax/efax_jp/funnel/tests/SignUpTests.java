@@ -8,11 +8,11 @@ import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.j2.faxqa.efax.common.BasePage;
 import org.j2.faxqa.efax.common.BaseTest;
 import org.j2.faxqa.efax.common.Config;
 import org.j2.faxqa.efax.common.TLDriverFactory;
 import org.j2.faxqa.efax.common.TestRail;
-import org.j2.faxqa.efax.corporate.myaccount.CommonMethods;
 import org.j2.faxqa.efax.efax_jp.funnel.pageobjects.SignUpPage;
 import org.j2.faxqa.efax.efax_jp.myaccount.pageobjects.LoginPage;
 import org.openqa.selenium.WebDriver;
@@ -30,8 +30,8 @@ public class SignUpTests extends BaseTest {
 	// If uploadresults=true, then the results get uploaded to location
 	// https://testrail.test.j2noc.com/
 
-	@TestRail(id = "C7862")
-	@Test(enabled = true, groups = { "smoke" }, priority = 1, description = "US > SignUp for a new user account")
+	@TestRail(id = "C8538")
+	@Test(enabled = true, groups = { "smoke" }, priority = 1, description = "eFax > Japan > Funnel > My Account > Validate Account Registration is Successful & Login to My Account without issues")
 	public void verifyNewUserSignUpLogin(ITestContext context) throws Exception {
 		WebDriver driver = null;
 
@@ -94,7 +94,7 @@ public class SignUpTests extends BaseTest {
 		boolean flag = signup.isSignUpSuccess();
 		Assert.assertTrue(flag);
 
-		String content = new CommonMethods().getWelcomeEmail(email, "eFax Plus へようこそ！[eFax]", 60);
+		String content = signup.getWelcomeEmail(email, "eFax Plus へようこそ！[eFax]", 60);
 		logger.info(content);
 		Matcher match1, match2, match3;
 		

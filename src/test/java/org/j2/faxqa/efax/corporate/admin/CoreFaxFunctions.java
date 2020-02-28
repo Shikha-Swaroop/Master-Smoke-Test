@@ -74,7 +74,6 @@ public class CoreFaxFunctions {
 	
 			TLDriverFactory.getTLDriver().navigate().to(Config.mgmtBaseUrl);
 			LoginPage loginPage = new LoginPage();
-			loginPage.open();
 			loginPage.login(Config.AccountNumberMGMT, Config.AdministratorNameMGMT, Config.PasswordMGMT);
 			HomePage home = new HomePage();
 			home.clickUsersTab();
