@@ -5,21 +5,30 @@
 		<parameter name="testrailprojectid" value="P8" />
 		<parameter name="testrailsuiteid" value="S84" />
 		<classes>
-			<class name="org.j2.faxqa.efax.efax_us.funnel.tests.SignUpTests" />
-			<class name="org.j2.faxqa.efax.efax_uk.funnel.tests.SignUpTests" />
-			<class name="org.j2.faxqa.efax.efax_jp.funnel.tests.SignUpTests" />
-			<class name="org.j2.faxqa.efax.efax_us.funnel.tests.SignUpTests" />
+			<class
+				name="org.j2.faxqa.efax.efax_us.funnel.tests.SignUpTests" />
+			<class
+				name="org.j2.faxqa.efax.efax_uk.funnel.tests.SignUpTests" />
+			<class
+				name="org.j2.faxqa.efax.efax_jp.funnel.tests.SignUpTests" />
+			<class
+				name="org.j2.faxqa.efax.efax_us.funnel.tests.SignUpTests" />
 			<class name="org.j2.faxqa.myfax.funnel.tests.SignUpTests" />
-<!-- 		<class name="org.j2.faxqa.metrofax.funnel.tests.SignUpTests" /> -->
-			
-			<class name="org.j2.faxqa.efax.efax_us.myaccount.tests.SendfaxTests" />
-			<class name="org.j2.faxqa.efax.efax_uk.myaccount.tests.SendfaxTests" />			
-			<class name="org.j2.faxqa.efax.efax_jp.myaccount.tests.SendfaxTests" />
-			<class name="org.j2.faxqa.myfax.myaccount.tests.SendfaxTests" />
-			<class name="org.j2.faxqa.metrofax.myaccount.tests.SendfaxTests" />
-			<class name="org.j2.faxqa.efax.corporate.myaccount.tests.SendfaxTests" />
 
-<!-- 		<class name="org.j2.faxqa.efax.corporate.admin.tests.AdminTests" /> -->
+			<class
+				name="org.j2.faxqa.efax.efax_us.myaccount.tests.SendfaxTests" />
+			<class
+				name="org.j2.faxqa.efax.efax_uk.myaccount.tests.SendfaxTests" />
+			<class
+				name="org.j2.faxqa.efax.efax_jp.myaccount.tests.SendfaxTests" />
+			<class name="org.j2.faxqa.myfax.myaccount.tests.SendfaxTests" />
+			<class
+				name="org.j2.faxqa.metrofax.myaccount.tests.SendfaxTests" />
+			<class
+				name="org.j2.faxqa.efax.corporate.myaccount.tests.SendfaxTests" />
+
+			<class
+				name="org.j2.faxqa.efax.corporate.admin.tests.AdminTests" />
 		</classes>
 	</test>
 </suite>
