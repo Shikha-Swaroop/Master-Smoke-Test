@@ -72,7 +72,7 @@ public class SendFaxesPage {
 
 	@FindBy(id = "txt_websend_faxBody")
 	private WebElement faxBody;
-	
+
 	@FindBy(id = "uploadFiles")
 	private WebElement uploadFiles;
 
@@ -103,17 +103,16 @@ public class SendFaxesPage {
 
 	@FindBy(id = "confirmation_coverPage")
 	private WebElement confirmation_coverPage;
-	
+
 	@FindBy(xpath = "//div[@id='dialog_websendConfirmation']//img[@alt='close']")
 	private WebElement confirmation_close;
-	
-	
+
 	public void sendfax(String senderid) throws Exception {
 		random = senderid;
-		Path folder = Paths.get((new java.io.File( "." )).getCanonicalPath(),"src/test/resources/sendrast");
-		Stream<Path> pathstream = Files.list(folder).filter(f->f.getFileName().toString().endsWith(".txt"));
-		attachments = Files.list(folder).filter(f->f.getFileName().toString().endsWith(".txt")).limit(1).map(f->f.toAbsolutePath().toString()).collect(Collectors.joining("|"));
-		
+		Path folder = Paths.get((new java.io.File(".")).getCanonicalPath(), "src/test/resources/sendrast");
+		Stream<Path> pathstream = Files.list(folder).filter(f -> f.getFileName().toString().endsWith(".txt"));
+		attachments = Files.list(folder).filter(f -> f.getFileName().toString().endsWith(".txt")).limit(1).map(f -> f.toAbsolutePath().toString()).collect(Collectors.joining("|"));
+
 		setrecipientFirstName(random);
 		setrecipientLastName(random);
 		setrecipientCompany(random);
@@ -144,7 +143,7 @@ public class SendFaxesPage {
 
 	private void setsendReceipt(String text) {
 		Select receipt = new Select(sendReceipt);
-		//receipt.selectByVisibleText(text);
+		// receipt.selectByVisibleText(text);
 		receipt.selectByIndex(0);
 		logger.info("Send Receipt field set to deafult first email.");
 	}
@@ -155,8 +154,7 @@ public class SendFaxesPage {
 	}
 
 	private void setuploadFiles(String absolutepaths) {
-		for(String file : absolutepaths.split("\\|"))
-		{
+		for (String file : absolutepaths.split("\\|")) {
 			wait.until(ExpectedConditions.elementToBeClickable(uploadFiles));
 			uploadFiles.sendKeys(file);
 			logger.info("Uploading attachment - " + file);
@@ -167,7 +165,7 @@ public class SendFaxesPage {
 		faxBody.sendKeys(text);
 		logger.info("Message body field set to " + text);
 	}
-	
+
 	private void setfaxSubject(String text) {
 		faxSubject.sendKeys(text);
 		logger.info("Subject field set to " + text);
@@ -186,9 +184,7 @@ public class SendFaxesPage {
 		if (add_btn.isEnabled()) {
 			logger.info("Add contact button enabled.");
 			add_btn.click();
-		}
-		else
-		{
+		} else {
 			logger.error("Add contact button disabled.");
 			throw new Exception("ERROR: Add contact button disabled.");
 		}
@@ -228,15 +224,12 @@ public class SendFaxesPage {
 		recipientFirstName.sendKeys(text);
 		logger.info("Recipient FirstName field set to " + text);
 	}
-	
+
 	public boolean confirmationVerify() {
-		
-		if (confirmation_sendto.getText().contains(random) && confirmation_subject.getText().contains(random) && confirmation_coverPage.getText().contains(random) && confirmation_faxQuality.getText().contains(mode))
-			return true;
-		else
-			return false;
+		wait.until(ExpectedConditions.visibilityOf(confirmation_sendto));
+		return confirmation_sendto.getText().contains(random);
 	}
-	
+
 	public void closeconfirmation() {
 		confirmation_close.click();
 	}

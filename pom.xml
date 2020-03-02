@@ -8,7 +8,7 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<suiteXmlFiles>testng.xml</suiteXmlFiles>
 		<skipTests>false</skipTests>
 		<testgroups>smoke,regression</testgroups>
@@ -16,11 +16,15 @@
 		<testrailUser>jagadeesh.medabalimi@j2.com</testrailUser>
 		<testrailpassword>testrail</testrailpassword>
 		<uploadResults>false</uploadResults>
-		<testRunId></testRunId>
+		<testRunId>R482</testRunId>
 		<webbrowser>chrome</webbrowser>
 	</properties>
-
 	<dependencies>
+		<dependency>
+			<groupId>org.sikuli</groupId>
+			<artifactId>sikuli-api</artifactId>
+			<version>1.2.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
@@ -36,31 +40,26 @@
 			<artifactId>webdrivermanager</artifactId>
 			<version>3.8.1</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.testng/testng -->
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>7.1.0</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>4.1.0</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.6</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>2.6</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -129,7 +128,7 @@
 		<profile>
 			<id>qa</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
 				<environment>qa</environment>
@@ -149,7 +148,7 @@
 		<profile>
 			<id>prod</id>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
 				<environment>prod</environment>

@@ -1,58 +1,57 @@
 package org.j2.faxqa.metrofax.myaccount.tests;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.UUID;
 
-import javax.management.RuntimeErrorException;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.j2.faxqa.efax.common.BaseTest;
 import org.j2.faxqa.efax.common.Config;
 import org.j2.faxqa.efax.common.TLDriverFactory;
-import org.j2.faxqa.efax.common.TestExecutionListener;
-import org.j2.faxqa.efax.common.TestNGReportListener;
 import org.j2.faxqa.efax.common.TestRail;
-import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.AccountDetailsPage;
-import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.HomePage;
-import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.LoginPage;
-import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.NavigationBar;
-import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.SendFaxesPage;
-import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.ViewFaxesPage;
-import org.openqa.selenium.By;
+import org.j2.faxqa.metrofax.myaccount.pageobjects.AccountDetailsPage;
+import org.j2.faxqa.metrofax.myaccount.pageobjects.HomePage;
+import org.j2.faxqa.metrofax.myaccount.pageobjects.LoginPage;
+import org.j2.faxqa.metrofax.myaccount.pageobjects.NavigationBar;
+import org.j2.faxqa.metrofax.myaccount.pageobjects.SendFaxesPage;
+import org.j2.faxqa.metrofax.myaccount.pageobjects.ViewFaxesPage;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.ITestContext;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 //@Listeners({TestExecutionListener.class, TestNGReportListener.class})
 public class SendfaxTests extends BaseTest {
 
-	protected static final Logger logger = LogManager.getLogger();
-
-	// If uploadresults=true, then the results get uploaded to location
-	// https://testrail.test.j2noc.com/
-
-	@TestRail(id = "C7861")
-	@Test(enabled = true, groups = { "smoke",
-			"regression" }, priority = 1, description = "US > Send a fax to self and verify the received fax")
-	public void testcase1(ITestContext context) throws Exception {
+	@TestRail(id = "C8534")
+	@Test(enabled = true, groups = { "smoke" }, priority = 1, description = "MetroFax > My Account > Send > Validate fax is sent successfully")
+	public void composeAndSendAFax(ITestContext context) throws Exception {
 		WebDriver driver = TLDriverFactory.getTLDriver();
-		driver.navigate().to(Config.efax_US_myaccountBaseUrl);
+		driver.navigate().to(Config.metrofax_myaccountBaseUrl);
 		LoginPage loginpage = new LoginPage();
-		loginpage.login();
+		loginpage.login(Config.metrofax_DID, Config.metrofax_PIN);
 
-		if (driver.findElements(By.id("viewfaxesdash")).size() > 0) {
-			logger.info("Default home-page is 'My eFax Home Page'");
-		} else if (driver.findElements(By.xpath("//*/a/span[contains(text(),'INBOX ')]")).size() > 0) {
-			logger.info("Default home-page is 'Main MessageCenter™ Page (View Faxes)'");
-			logger.info("Navigating back to default home-page");
-			driver.findElement(By.id("myaccthometab")).click();
-		}
+		HomePage homepage = new HomePage();
+		homepage.gotoacctdetailsview();
+
+		String senderid = UUID.randomUUID().toString().replace("-", "").substring(0, 15);
+		AccountDetailsPage acctdetailspage = new AccountDetailsPage();
+		acctdetailspage.updatesendCSID(senderid);
+
+		homepage = new HomePage();
+		homepage.gotosendfaxesview();
+
+		SendFaxesPage sendpage = new SendFaxesPage();
+		sendpage.sendfax(senderid);
+
+		Assert.assertTrue(sendpage.confirmationVerify());
+	}
+
+	
+	@TestRail(id = "C8535")
+	@Test(enabled = true, groups = { "smoke" }, priority = 1, description = "MetroFax > My Account > Receive > Validate fax is retrieved successfully")
+	public void sendAFaxToSelfAndVerifyFaxIsReceived(ITestContext context) throws Exception {
+		WebDriver driver = TLDriverFactory.getTLDriver();
+		driver.navigate().to(Config.metrofax_myaccountBaseUrl);
+		LoginPage loginpage = new LoginPage();
+		loginpage.login(Config.metrofax_DID, Config.metrofax_PIN);
 
 		HomePage homepage = new HomePage();
 		homepage.gotoacctdetailsview();
@@ -73,19 +72,19 @@ public class SendfaxTests extends BaseTest {
 		homepage = new HomePage();
 		homepage.gotoacctdetailsview();
 		acctdetailspage = new AccountDetailsPage();
-		flag = acctdetailspage.isSendActivityLogFound(senderid, 60);
+		flag = acctdetailspage.isSendActivityLogFound(senderid, Config.myccount_sendWait);
 		// Assert.assertTrue(flag);
 
 		acctdetailspage.switchToReceiveLogs();
 		acctdetailspage = new AccountDetailsPage();
-		flag = acctdetailspage.isReceiveActivityLogFound(senderid, 60);
+		flag = acctdetailspage.isReceiveActivityLogFound(senderid, Config.myccount_receiveWait);
 		// Assert.assertTrue(flag);
 
 		NavigationBar navigate = new NavigationBar();
 		navigate.clickViewFaxesTab();
 
 		ViewFaxesPage viewfaxespage = new ViewFaxesPage();
-		flag = viewfaxespage.isFaxReceived(senderid, 60);
+		flag = viewfaxespage.isFaxReceived(senderid, Config.myccount_inboxWait);
 		Assert.assertTrue(flag);
 
 	}

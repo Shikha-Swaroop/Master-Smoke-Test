@@ -242,8 +242,7 @@ public class SignUpPage extends BasePage {
 	public void selectCardNumber(String text) {
 		this.scrollToTheSpecificWebelement(CreditCardNumber);
 		CreditCardNumber.click();
-		CreditCardNumber.clear();
-		CreditCardNumber.sendKeys(text);
+		CreditCardNumber.sendKeys(text.replaceAll("....", "$0 "));
 		logger.info("CreditCardNumber set to - " + text);
 	}
 
@@ -293,5 +292,9 @@ public class SignUpPage extends BasePage {
 	public void clickLogin() {
 		logger.info("Attempting Auto log-in.");
 		btnLogin.click();
+	}
+	
+	public boolean isLoggedIn() {
+		return !(driver.findElements(By.xpath("//*[@id='loginForm']//input[@name='Submit']")).size() > 0); 
 	}
 }

@@ -2,6 +2,10 @@ package org.j2.faxqa.efax.common;
 
 import io.github.bonigarcia.wdm.PhantomJsDriverManager;
 import io.github.bonigarcia.wdm.WebDriverManager;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
@@ -16,6 +20,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
+import org.openqa.selenium.opera.OperaDriver;
+import org.openqa.selenium.opera.OperaOptions;
 import org.openqa.selenium.remote.CapabilityType;
 
 public class TLDriverFactory {
@@ -30,13 +36,21 @@ public class TLDriverFactory {
 		case "chrome":
 			WebDriverManager.chromedriver().setup();
 			ChromeOptions choptions = new ChromeOptions();
-			choptions.setCapability("InPrivate", true);
-			choptions.addArguments("--ignore-certificate-errors");
+			//choptions.setCapability("InPrivate", true);
+			choptions.setExperimentalOption("excludeSwitches", Arrays.asList("disable-component-update")); 
 			choptions.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+			choptions.addArguments("--ignore-certificate-errors");		
+			choptions.addArguments("--disable-features=EnableEphemeralFlashPermission");
 			choptions.addArguments("--disable-features=VizDisplayCompositor");
 			choptions.addArguments("--start-maximized");
 			choptions.addArguments("--disable-infobars");
 			choptions.setExperimentalOption("useAutomationExtension", false);
+			
+			Map<String, Object> prefs = new HashMap<>();
+			prefs.put("profile.content_settings.exceptions.plugins.*,*.setting", 1);
+			prefs.put("profile.default_content_settings.state.flash",1);
+			choptions.setExperimentalOption("prefs", prefs);
+			
 			tlDriver.set(new ChromeDriver(choptions));
 			break;
 
@@ -67,6 +81,12 @@ public class TLDriverFactory {
 			tlDriver.set(new EdgeDriver(edgeoptions));
 			break;
 			
+		case "opera":
+			WebDriverManager.operadriver().setup();
+			OperaOptions operaoptions = new OperaOptions();
+			operaoptions.setCapability("InPrivate", true);
+			tlDriver.set(new OperaDriver(operaoptions));
+			break;
 			
 		default:
 			WebDriverManager.chromedriver().setup();
@@ -85,7 +105,7 @@ public class TLDriverFactory {
 
 		LogManager.getLogger().info("Created ThreadLocal webdriver.");
 		
-		int wait = 30;
+		int wait = 45;
 		tlDriver.get().manage().deleteAllCookies();
 		tlDriver.get().manage().window().maximize();
 		tlDriver.get().manage().timeouts().implicitlyWait(wait, TimeUnit.SECONDS);

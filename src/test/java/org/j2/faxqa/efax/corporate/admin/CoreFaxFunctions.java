@@ -169,9 +169,6 @@ public class CoreFaxFunctions {
 		SendFaxesModalMyAccount sendFaxesModalMyAccount = new SendFaxesModalMyAccount();
 		boolean response = sendFaxesModalMyAccount.sendfax(firstname, lastname, companyName, toFaxNumber, subject,
 				messageBody, referenceId, accountId, clientName, matter, quality, attachments);
-
-		Assert.assertEquals(response, true);
-		sendFaxesModalMyAccount.closeconfirmation();
 		
 		return response;
 	}

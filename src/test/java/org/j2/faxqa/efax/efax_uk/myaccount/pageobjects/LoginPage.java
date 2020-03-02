@@ -14,10 +14,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.apache.logging.log4j.*;
+import org.j2.faxqa.efax.common.BasePage;
 import org.j2.faxqa.efax.common.Config;
 import org.j2.faxqa.efax.common.TLDriverFactory;
 
-public class LoginPage {
+public class LoginPage extends BasePage {
 	private WebDriver driver;
 	private Logger logger;
 	WebDriverWait wait;
@@ -36,7 +37,8 @@ public class LoginPage {
 	@FindBy(id = "pin")
 	private WebElement passwordpin;
 
-	@FindBy(id = "loginSubmitBtn")
+	final String loginbutton = "//*[@id='loginForm']//input[@name='Submit']";
+	@FindBy(xpath = loginbutton)
 	private WebElement loginSubmitBtn;
 
 	@FindBy(id = "cookie-understand")
@@ -49,7 +51,7 @@ public class LoginPage {
 		logger.info("DID = " + faxNumber);
 		logger.info("PIN = " + password);
 
-		cookie_understand.click();
+		click(By.id("cookie-understand"));
 		
 		submit();
 	}
@@ -62,7 +64,7 @@ public class LoginPage {
 	}
 
 	public boolean isLoggedIn() {
-		return driver.findElements(By.id("loginSubmitBtn")).size() > 0; 
+		return !(driver.findElements(By.xpath(loginbutton)).size() > 0); 
 	}
 
 }

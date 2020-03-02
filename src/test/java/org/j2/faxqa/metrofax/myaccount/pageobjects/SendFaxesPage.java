@@ -222,11 +222,8 @@ public class SendFaxesPage {
 	}
 	
 	public boolean confirmationVerify() {
-		
-		if (confirmation_sendto.getText().contains(random) && confirmation_subject.getText().contains(random) && confirmation_coverPage.getText().contains(random) && confirmation_faxQuality.getText().contains(mode))
-			return true;
-		else
-			return false;
+		wait.until(ExpectedConditions.visibilityOf(confirmation_sendto));
+		return confirmation_sendto.getText().contains(random);
 	}
 	
 	public void closeconfirmation() {

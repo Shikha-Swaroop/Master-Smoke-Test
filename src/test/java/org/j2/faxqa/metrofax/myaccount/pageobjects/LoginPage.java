@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.apache.logging.log4j.*;
 import org.j2.faxqa.efax.common.Config;
@@ -28,20 +29,27 @@ public class LoginPage {
 	@FindBy(id = "pin")
 	private WebElement passwordpin;
 
-	@FindBy(id = "loginSubmitBtn")
+	@FindBy(id = "submitButton")
 	private WebElement loginSubmitBtn;
 
 	@FindBy(id = "cookie-understand")
 	private WebElement cookie_understand;
 
-	public void login() {
-		faxnumber.sendKeys(Config.DID_US);
-		passwordpin.sendKeys(Config.PIN_US);
+	public void login(String DID, String PIN) {
+		wait.until(ExpectedConditions.elementToBeClickable(faxnumber));
+		faxnumber.click();
+		faxnumber.clear();
+		faxnumber.sendKeys(DID);
+		
+		wait.until(ExpectedConditions.elementToBeClickable(passwordpin));
+		passwordpin.click();
+		passwordpin.clear();
+		passwordpin.sendKeys(PIN);
 
-		logger.info("DID = " + Config.DID_US);
-		logger.info("PIN = " + Config.PIN_US);
+		logger.info("DID = " + DID);
+		logger.info("PIN = " + PIN);
 
-		cookie_understand.click();
+		//cookie_understand.click();
 		
 		submit();
 	}

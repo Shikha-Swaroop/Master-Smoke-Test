@@ -32,7 +32,7 @@ public class SendFaxesPage {
 		wait = new WebDriverWait(driver, 30);
 		logger.info(driver.getTitle() + " - [" + driver.getCurrentUrl() + "]");
 	}
-		
+
 	@FindBy(id = "txt_websend_recipientName")
 	private WebElement recipientFirstName;
 
@@ -56,7 +56,7 @@ public class SendFaxesPage {
 
 	@FindBy(id = "txt_websend_faxBody")
 	private WebElement faxBody;
-	
+
 	@FindBy(id = "uploadFiles")
 	private WebElement uploadFiles;
 
@@ -87,29 +87,29 @@ public class SendFaxesPage {
 
 	@FindBy(id = "confirmation_coverPage")
 	private WebElement confirmation_coverPage;
-	
+
 	@FindBy(xpath = "//div[@id='dialog_websendConfirmation']//img[@alt='close']")
 	private WebElement confirmation_close;
-	
+
 	String random = "";
 	String mode = "";
-	
+
 	public void sendfax(String senderid) throws Exception {
-		
+
 		Faker testdata = new Faker(Locale.JAPANESE);
 		random = senderid;
-		mode = "æ¨™æº–";		
+		mode = "ドラフトモード";
 		String firstname = "QA" + testdata.address().firstName().toUpperCase().replace("'", "");
 		String lastname = testdata.address().lastName().toUpperCase().replace("'", "");
 		String email = firstname + "." + lastname + testdata.number().digits(3) + "@mailinator.com";
 		String phone = testdata.phoneNumber().cellPhone().toString();
 		String company = testdata.company().name();
-		String country = "ã‚¢ãƒ¡ãƒªã‚«å�ˆè¡†å›½";
-		
-		Path folder = Paths.get((new java.io.File( "." )).getCanonicalPath(),"src/test/resources/sendrast");
-		Stream<Path> pathstream = Files.list(folder).filter(f->f.getFileName().toString().endsWith(".txt"));
-		String attachments = Files.list(folder).filter(f->f.getFileName().toString().endsWith(".txt")).limit(1).map(f->f.toAbsolutePath().toString()).collect(Collectors.joining("|"));
-		
+		String country = "アメリカ合衆国";
+
+		Path folder = Paths.get((new java.io.File(".")).getCanonicalPath(), "src/test/resources/sendrast");
+		Stream<Path> pathstream = Files.list(folder).filter(f -> f.getFileName().toString().endsWith(".txt"));
+		String attachments = Files.list(folder).filter(f -> f.getFileName().toString().endsWith(".txt")).limit(1).map(f -> f.toAbsolutePath().toString()).collect(Collectors.joining("|"));
+
 		setrecipientName(firstname + " " + lastname);
 		setrecipientCompany(random);
 		settoCountry(country);
@@ -137,14 +137,13 @@ public class SendFaxesPage {
 
 	private void setsendReceipt(String text) {
 		Select receipt = new Select(sendReceipt);
-		//receipt.selectByVisibleText(text);
+		// receipt.selectByVisibleText(text);
 		receipt.selectByIndex(0);
 		logger.info("Send Receipt field set to deafult first email.");
 	}
 
 	private void setuploadFiles(String absolutepaths) {
-		for(String file : absolutepaths.split("\\|"))
-		{
+		for (String file : absolutepaths.split("\\|")) {
 			wait.until(ExpectedConditions.elementToBeClickable(uploadFiles));
 			uploadFiles.sendKeys(file);
 			logger.info("Uploading attachment - " + file);
@@ -155,7 +154,7 @@ public class SendFaxesPage {
 		faxBody.sendKeys(text);
 		logger.info("Message body field set to " + text);
 	}
-	
+
 	private void setfaxSubject(String text) {
 		faxSubject.sendKeys(text);
 		logger.info("Subject field set to " + text);
@@ -174,9 +173,7 @@ public class SendFaxesPage {
 		if (add_btn.isEnabled()) {
 			logger.info("Add contact button enabled.");
 			add_btn.click();
-		}
-		else
-		{
+		} else {
 			logger.error("Add contact button disabled.");
 			throw new Exception("ERROR: Add contact button disabled.");
 		}
@@ -204,15 +201,12 @@ public class SendFaxesPage {
 		recipientFirstName.sendKeys(text);
 		logger.info("Recipient FirstName field set to " + text);
 	}
-	
+
 	public boolean confirmationVerify(String sender) {
-		
-		if (confirmation_sendto.getText().contains(sender) && confirmation_subject.getText().contains(sender) && confirmation_coverPage.getText().contains(sender) && confirmation_faxQuality.getText().contains(mode))
-			return true;
-		else
-			return false;
+		wait.until(ExpectedConditions.visibilityOf(confirmation_sendto));
+		return confirmation_sendto.getText().contains(sender);
 	}
-	
+
 	public void closeconfirmation() {
 		confirmation_close.click();
 	}

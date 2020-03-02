@@ -6,6 +6,7 @@ import java.rmi.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,8 @@ import org.testng.Reporter;
 import org.zeroturnaround.zip.commons.FileUtils;
 
 import com.google.gson.GsonBuilder;
+
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -31,8 +34,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
-public class TestExecutionListener
-		implements IInvokedMethodListener, ISuiteListener, ITestListener, IConfigurationListener {
+public class TestExecutionListener implements IInvokedMethodListener, ISuiteListener, ITestListener, IConfigurationListener {
 	protected static final Logger logger = LogManager.getLogger();
 	private List<Map<String, Object>> results = Collections.synchronizedList(new ArrayList<Map<String, Object>>());
 	public String testRunId = null;
@@ -44,6 +46,15 @@ public class TestExecutionListener
 		testRunId = System.getProperty("testRunId");
 		logger.info("Initializing....");
 		EnvironmentSetup.setupEnvironment();
+		if (System.getProperty("os.name").contains("Windows")) {
+			Process process = null;
+			try {
+				process = Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe, /IM IEDriverServer.exe, /IM edgedriver.exe, /IM geckodriver.exe, /IM operadriver.exe /T");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			process.destroy();
+		}
 	}
 
 	@Override
@@ -53,13 +64,21 @@ public class TestExecutionListener
 	}
 
 	@Override
-	public void onTestFailure(ITestResult result) {
-		logger.info("Test failed - " + result.getMethod().getConstructorOrMethod().getMethod());
+	public void onTestFailure(ITestResult testResult) {
+		if (testResult.getThrowable() != null) {
+			testResult.getThrowable().printStackTrace();
+			LogManager.getLogger().error(ExceptionUtils.getFullStackTrace(testResult.getThrowable()));
+		}
+		logger.info("Test failed - " + testResult.getMethod().getConstructorOrMethod().getMethod());
 	}
 
 	@Override
-	public void onTestSkipped(ITestResult result) {
-		logger.info("Test skipped - " + result.getMethod().getConstructorOrMethod().getMethod());
+	public void onTestSkipped(ITestResult testResult) {
+		if (testResult.getThrowable() != null) {
+			testResult.getThrowable().printStackTrace();
+			LogManager.getLogger().error(ExceptionUtils.getFullStackTrace(testResult.getThrowable()));
+		}
+		logger.info("Test skipped - " + testResult.getMethod().getConstructorOrMethod().getMethod());
 	}
 
 	@Override
@@ -105,16 +124,17 @@ public class TestExecutionListener
 
 	private void captureScreen(ITestResult testResult) {
 		File src = (((TakesScreenshot) TLDriverFactory.getTLDriver()).getScreenshotAs(OutputType.FILE));
-		String path = testResult.getTestContext().getOutputDirectory() + "\\screenshots\\"
-				+ testResult.getMethod().getConstructorOrMethod().getMethod() + ".png";
-		System.out.println(path);
-		File dest = new File(path);
+		String path = testResult.getTestContext().getOutputDirectory();
+		String relPath = "\\screenshots\\" + new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss.SSS").format(new Date()) + ".png";
+		String fullPath = path + relPath;
+		System.out.println(fullPath);
+		File dest = new File(fullPath);
 		try {
 			FileUtils.copyFile(src, dest);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Reporter.log("<br><img src='" + path + "' style=\"width: 33%; height: 33%\"");
+		Reporter.log("<br><img src='" + ".\\Suite" + relPath + "' style=\"width: 33%; height: 33%\"/></br>");
 	}
 
 	private void updateResult(ITestResult testResult, String testrailid, boolean pass) {
@@ -123,9 +143,7 @@ public class TestExecutionListener
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("case_id", testrailid);
 		result.put("status_id", testResult.getStatus() == 1 ? 1 : testResult.getStatus() == 2 ? 5 : 2);
-		result.put("comment",
-				(testResult.getStatus() != 1 ? "Unexpected error while executing this test." : "Executed successfully.")
-						+ "\r\n" + Reporter.getOutput(testResult).stream().collect(Collectors.joining("\r\n")));
+		result.put("comment", (testResult.getStatus() != 1 ? "Unexpected error while executing this test." : "Executed successfully.") + "\r\n" + Reporter.getOutput(testResult).stream().collect(Collectors.joining("\r\n")));
 		result.put("elapsed", (testResult.getEndMillis() - testResult.getStartMillis()) / (1000 * 60));
 		result.put("defects", "");
 		result.put("version", "");
@@ -140,12 +158,8 @@ public class TestExecutionListener
 		String suite_name = System.getenv("JOB_NAME") == null ? "TestRun" : System.getenv("JOB_NAME") + " : ";
 		suite_name = String.join("_", suite_name, System.getProperty("environment").toUpperCase());
 		suite_name = String.join("_", suite_name, formatter.format(System.currentTimeMillis()));
-		List<ITestNGMethod> temp = suite.getAllMethods().stream()
-				.filter(m -> m.getConstructorOrMethod().getMethod().getAnnotation(TestRail.class) != null)
-				.collect(Collectors.toList());
-		ArrayList<String> testids = temp.stream()
-				.map(m -> m.getConstructorOrMethod().getMethod().getAnnotation(TestRail.class).id().substring(1))
-				.collect(Collectors.toCollection(ArrayList::new));
+		List<ITestNGMethod> temp = suite.getAllMethods().stream().filter(m -> m.getConstructorOrMethod().getMethod().getAnnotation(TestRail.class) != null).collect(Collectors.toList());
+		ArrayList<String> testids = temp.stream().map(m -> m.getConstructorOrMethod().getMethod().getAnnotation(TestRail.class).id().substring(1)).collect(Collectors.toCollection(ArrayList::new));
 
 		tr_client = new APIClient(System.getProperty("testrailBaseUrl"));
 		Map<String, Object> newrun = new HashMap<String, Object>();
@@ -159,8 +173,7 @@ public class TestExecutionListener
 		newrun.put("case_ids", testids);
 		JSONObject result = null;
 		try {
-			result = (JSONObject) tr_client.sendPost(String.format("add_run/%s",
-					suite.getXmlSuite().getAllParameters().get("testrailprojectid").replace("P", "")), newrun);
+			result = (JSONObject) tr_client.sendPost(String.format("add_run/%s", suite.getXmlSuite().getAllParameters().get("testrailprojectid").replace("P", "")), newrun);
 			logger.info(new GsonBuilder().setPrettyPrinting().create().toJson(result));
 		} catch (Exception e) {
 			logger.error("TestRail Host Not found (VPN required?)");
@@ -168,8 +181,7 @@ public class TestExecutionListener
 			return;
 		}
 		testRunId = result.get("id").toString();
-		logger.info("***  TestRun [" + suite_name + "] created with id [" + testRunId + "] with testcases : "
-				+ testids + "  ***");
+		logger.info("***  TestRun [" + suite_name + "] created with id [" + testRunId + "] with testcases : " + testids + "  ***");
 
 	}
 
@@ -180,8 +192,7 @@ public class TestExecutionListener
 		try {
 			Map<String, List<Map<String, Object>>> objresults = new HashMap<String, List<Map<String, Object>>>();
 			objresults.put("results", results);
-			result = (JSONArray) tr_client.sendPost(String.format("add_results_for_cases/%s", testRunId),
-					objresults);
+			result = (JSONArray) tr_client.sendPost(String.format("add_results_for_cases/%s", testRunId), objresults);
 			logger.info(new GsonBuilder().setPrettyPrinting().create().toJson(result));
 		} catch (Exception e) {
 			e.printStackTrace();

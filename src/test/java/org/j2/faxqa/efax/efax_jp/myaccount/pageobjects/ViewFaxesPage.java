@@ -74,7 +74,7 @@ public class ViewFaxesPage extends BasePage {
 		WebElement fax = null;
 		while (fax == null && waittime.isAfter(Instant.now())) {
 			logger.info("Waiting for the fax...");
-			Thread.sleep(10000);
+			Thread.sleep(30000);
 			inbox.click();
 			fax = getreceivedfax(from);
 		} 

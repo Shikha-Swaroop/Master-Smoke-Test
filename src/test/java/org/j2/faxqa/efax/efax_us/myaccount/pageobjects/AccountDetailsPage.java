@@ -70,12 +70,12 @@ public class AccountDetailsPage extends BasePage {
 
 	@FindBy(id = "send_usageGrid")
 	private WebElement send_usageGrid;
-	
+
 	@FindBy(id = "date_sendToDate")
 	private WebElement date_sendToDate;
 
 	@FindBy(id = "date_receiveToDate")
-	private WebElement date_receiveToDate;	
+	private WebElement date_receiveToDate;
 
 	@FindBy(id = "btn_receiveLog")
 	private WebElement btn_receiveLog;
@@ -136,16 +136,15 @@ public class AccountDetailsPage extends BasePage {
 	////////////////////////////////////////////////////// /////////////////////////////////////////////////////
 
 	private WebElement getExpectedReceiveRecordLog(String senderid) {
-		wait.until(ExpectedConditions
-				.invisibilityOfElementLocated(By.xpath("//div[@id='load_receive_usageGrid' and text()='Loading...']")));
-		if (receive_usageGrid.findElements(By.tagName("tr")).size() > 1)
-			for (WebElement element : receive_usageGrid
-					.findElements(By.xpath(".//tbody/tr[@class='ui-widget-content jqgrow ui-row-ltr']")))
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@id='load_receive_usageGrid' and text()='Loading...']")));
+		if (receive_usageGrid.findElements(By.tagName("tr")).size() > 1) {
+			wait.until(ExpectedConditions.elementToBeClickable(receive_usageGrid));
+			for (WebElement element : receive_usageGrid.findElements(By.xpath(".//tbody/tr[@class='ui-widget-content jqgrow ui-row-ltr']")))
 				if (element.findElements(By.tagName("td")).get(4).getText().contains(senderid)) {
 					logger.info("Log record found.");
 					return element;
 				}
-
+		}
 		return null;
 	}
 
@@ -153,8 +152,7 @@ public class AccountDetailsPage extends BasePage {
 		setReceiveDate();
 		clickReceiveGo();
 
-		wait.until(ExpectedConditions
-				.invisibilityOfElementLocated(By.xpath("//div[@id='load_receive_usageGrid' and text()='Loading...']")));
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@id='load_receive_usageGrid' and text()='Loading...']")));
 		Instant waittime = Instant.now().plusSeconds(timeout);
 		logger.info("Expected Receive Activity Log Timeout set to " + timeout + " seconds.");
 		WebElement log = null;
@@ -162,7 +160,7 @@ public class AccountDetailsPage extends BasePage {
 			logger.info("Waiting for the log record...");
 			Thread.sleep(10000);
 			clickReceiveGo();
-			log = getExpectedReceiveRecordLog(senderid);
+			log = getReceiveRecord(senderid);
 		}
 
 		if (log != null) {
@@ -184,20 +182,33 @@ public class AccountDetailsPage extends BasePage {
 		logger.info("From = " + log.findElements(By.tagName("td")).get(4).getText());
 	}
 
-	//////////////////////////////////////////////////////// Send Logs
-	//////////////////////////////////////////////////////// /////////////////////////////////////////////////////////////
+	private WebElement getReceiveRecord(String senderid)
+	{
+		if (driver.findElements(By.xpath("//*[@id='receive_usageGrid']//td[contains(text(),'" + senderid + "')]/..")).size() > 0)
+			return driver.findElement(By.xpath("//*[@id='receive_usageGrid']//td[contains(text(),'" + senderid + "')]/.."));
+		return null;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	private WebElement getSendRecord(String senderid)
+	{
+		if (driver.findElements(By.xpath("//*[@id='send_usageGrid']//td[contains(text(),'" + senderid + "')]/..")).size() > 0)
+			return driver.findElement(By.xpath("//*[@id='send_usageGrid']//td[contains(text(),'" + senderid + "')]/.."));
+		return null;
+	}
 
 	private WebElement getExpectedSendRecordLog(String senderid) {
-		wait.until(ExpectedConditions
-				.invisibilityOfElementLocated(By.xpath("//div[@id='load_send_usageGrid' and text()='Loading...']")));
-		if (send_usageGrid.findElements(By.tagName("tr")).size() > 1)
-			for (WebElement element : send_usageGrid
-					.findElements(By.xpath(".//tbody/tr[@class='ui-widget-content jqgrow ui-row-ltr']"))) {
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@id='load_send_usageGrid' and text()='Loading...']")));
+		if (send_usageGrid.findElements(By.tagName("tr")).size() > 1) {
+			wait.until(ExpectedConditions.visibilityOfAllElements(send_usageGrid));
+			for (WebElement element : send_usageGrid.findElements(By.xpath(".//tbody/tr[@class='ui-widget-content jqgrow ui-row-ltr']"))) {
 				if (element.findElements(By.tagName("td")).get(4).getText().contains(senderid)) {
 					logger.info("Log record found.");
 					return element;
 				}
 			}
+		}
 		return null;
 	}
 
@@ -206,8 +217,7 @@ public class AccountDetailsPage extends BasePage {
 		clickSendActivityDetails();
 		setSendDate();
 		clickSendGo();
-		wait.until(ExpectedConditions
-				.invisibilityOfElementLocated(By.xpath("//div[@id='load_send_usageGrid' and text()='Loading...']")));
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@id='load_send_usageGrid' and text()='Loading...']")));
 		Instant waittime = Instant.now().plusSeconds(timeout);
 		logger.info("Expected Send Activity Log Timeout set to " + timeout + " seconds.");
 		WebElement log = null;
@@ -215,7 +225,7 @@ public class AccountDetailsPage extends BasePage {
 			logger.info("Waiting for the log record...");
 			Thread.sleep(10000);
 			clickSendGo();
-			log = getExpectedSendRecordLog(senderid);
+			log = getSendRecord(senderid);
 		}
 
 		if (log != null) {
@@ -230,14 +240,14 @@ public class AccountDetailsPage extends BasePage {
 
 	private void setSendDate() {
 		String today = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
-		((JavascriptExecutor)this.driver).executeScript("document.getElementById('date_sendToDate').value = '"+ today +"';", date_sendToDate);	
+		((JavascriptExecutor) this.driver).executeScript("document.getElementById('date_sendToDate').value = '" + today + "';", date_sendToDate);
 	}
 
 	private void setReceiveDate() {
 		String today = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
-		((JavascriptExecutor)this.driver).executeScript("document.getElementById('date_receiveToDate').value = '"+ today +"';", date_receiveToDate);	
+		((JavascriptExecutor) this.driver).executeScript("document.getElementById('date_receiveToDate').value = '" + today + "';", date_receiveToDate);
 	}
-	
+
 	public void printSendActivityLog1(WebElement log) {
 		logger.info("Expected fax received successfully.");
 		logger.info("Date = " + log.findElements(By.tagName("td")).get(0).getText());

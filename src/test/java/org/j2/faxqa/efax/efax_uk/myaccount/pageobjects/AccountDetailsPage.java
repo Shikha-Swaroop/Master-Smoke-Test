@@ -1,6 +1,7 @@
 package org.j2.faxqa.efax.efax_uk.myaccount.pageobjects;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,7 +20,9 @@ import java.io.FileFilter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collector;
@@ -93,6 +96,22 @@ public class AccountDetailsPage extends BaseTest {
 	@FindBy(id = "btn_sendLog")
 	private WebElement btn_sendLog;
 
+	@FindBy(id = "date_sendToDate")
+	private WebElement date_sendToDate;
+
+	@FindBy(id = "date_receiveToDate")
+	private WebElement date_receiveToDate;	
+	
+	private void setSendDate() {
+		String today = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
+		((JavascriptExecutor)this.driver).executeScript("document.getElementById('date_sendToDate').value = '"+ today +"';", date_sendToDate);	
+	}
+
+	private void setReceiveDate() {
+		String today = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
+		((JavascriptExecutor)this.driver).executeScript("document.getElementById('date_receiveToDate').value = '"+ today +"';", date_receiveToDate);	
+	}
+	
 	public void updatesendCSID(String sender) {
 		wait.until(ExpectedConditions.elementToBeClickable(sendfaxoptionsedit));
 		sendfaxoptionsedit.click();
@@ -213,6 +232,7 @@ public class AccountDetailsPage extends BaseTest {
 	public boolean isSendActivityLogFound(String senderid, int timeout) throws InterruptedException {
 		clickUsageTab();
 		clickSendActivityDetails();
+		setSendDate();
 		clickSendGo();
 		wait.until(ExpectedConditions
 				.invisibilityOfElementLocated(By.xpath("//div[@id='load_send_usageGrid' and text()='Loading...']")));
@@ -249,4 +269,6 @@ public class AccountDetailsPage extends BaseTest {
 	public void switchToReceiveLogs() {
 		driver.findElement(By.xpath("//a[text()='View Receive Logs']")).click();
 	}
+	
+
 }

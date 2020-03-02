@@ -36,12 +36,12 @@ public class LoginPage extends BasePage {
 	@FindBy(id = "cookie-understand")
 	private WebElement cookie_understand;
 
-	public void login() {
-		faxnumber.sendKeys(Config.DID_US);
-		passwordpin.sendKeys(Config.PIN_US);
+	public void login(String DID, String PIN) {
+		faxnumber.sendKeys(DID);
+		passwordpin.sendKeys(PIN);
 
-		logger.info("DID = " + Config.DID_US);
-		logger.info("PIN = " + Config.PIN_US);
+		logger.info("DID = " + DID);
+		logger.info("PIN = " + PIN);
 		
 		submit();
 	}

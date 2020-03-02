@@ -2,6 +2,11 @@ package org.j2.faxqa.efax.common;
 
 public class Config {
 
+
+	public static int myccount_sendWait;
+	public static int myccount_receiveWait;
+	public static int myccount_inboxWait;
+
 	/* efax US related config*/ 
 	public static String efax_US_myaccountBaseUrl;
 	public static String efax_US_funnelBaseUrl;
@@ -31,7 +36,7 @@ public class Config {
 	public static String myfax_funnelBaseUrl;
 	public static String myfax_landingpageBaseUrl;
 	public static String myfax_DID;
-	public static String myfax_PIN;
+	public static String myfax_Password;
 	public static String myfax_creditCard;
 	
 	/* efax metrofax related config*/ 

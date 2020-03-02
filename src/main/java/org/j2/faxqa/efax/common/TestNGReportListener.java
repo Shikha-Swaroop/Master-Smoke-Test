@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.text.NumberFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import org.testng.IReporter;
@@ -197,7 +201,7 @@ public class TestNGReportListener implements IReporter {
 		writer.print("<th># Skipped</th>");
 		writer.print("<th># Retried</th>");
 		writer.print("<th># Failed</th>");
-		writer.print("<th>Time (ms)</th>");
+		writer.print("<th>Duration</th>");
 		writer.print("<th>Included Groups</th>");
 		writer.print("<th>Excluded Groups</th>");
 		writer.println("</tr>");
@@ -228,7 +232,8 @@ public class TestNGReportListener implements IReporter {
 				writeTableData(integerFormat.format(skippedTests), (skippedTests > 0 ? "num attn" : "num"));
 				writeTableData(integerFormat.format(retriedTests), (retriedTests > 0 ? "num attn" : "num"));
 				writeTableData(integerFormat.format(failedTests), (failedTests > 0 ? "num attn" : "num"));
-				writeTableData(decimalFormat.format(duration), "num");
+				//writeTableData(decimalFormat.format(duration), "num");
+				writeTableData(duration/(1000 * 60) + " Minutes");
 				writeTableData(testResult.getIncludedGroups());
 				writeTableData(testResult.getExcludedGroups());
 
@@ -276,7 +281,7 @@ public class TestNGReportListener implements IReporter {
 		writer.print("<th>Class</th>");
 		writer.print("<th>Method</th>");
 		writer.print("<th>Start</th>");
-		writer.print("<th>Time (ms)</th>");
+		writer.print("<th>Duration</th>");
 		writer.print("</tr>");
 		writer.print("</thead>");
 
@@ -347,9 +352,13 @@ public class TestNGReportListener implements IReporter {
 
 					ITestResult firstResult = results.iterator().next();
 					String methodName = Utils.escapeHtml(firstResult.getMethod().getMethodName());
+					
 					long start = firstResult.getStartMillis();
 					long duration = firstResult.getEndMillis() - start;
 
+					String time = LocalDateTime.ofInstant(Instant.ofEpochMilli(firstResult.getStartMillis()), TimeZone.getDefault().toZoneId()).format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm"));
+					String duratin = duration/(1000 * 60) + " minutes";
+					
 					// The first method per class shares a row with the class
 					// header
 					if (methodIndex > 0) {
@@ -360,8 +369,8 @@ public class TestNGReportListener implements IReporter {
 					// method
 					buffer.append("<td><a href=\"#m").append(scenarioIndex).append("\">").append(methodName)
 							.append("</a></td>").append("<td rowspan=\"").append(resultsCount).append("\">")
-							.append(start).append("</td>").append("<td rowspan=\"").append(resultsCount).append("\">")
-							.append(duration).append("</td></tr>");
+							.append(time).append("</td>").append("<td rowspan=\"").append(resultsCount).append("\">")
+							.append(duratin).append("</td></tr>");
 					scenarioIndex++;
 
 					// Write the remaining scenarios for the method

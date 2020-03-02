@@ -1,6 +1,7 @@
 package org.j2.faxqa.myfax.myaccount.pageobjects;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -8,7 +9,11 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.Date;
+
 import org.apache.logging.log4j.*;
 import org.j2.faxqa.efax.common.BasePage;
 import org.j2.faxqa.efax.common.TLDriverFactory;
@@ -74,6 +79,22 @@ public class AccountDetailsPage extends BasePage {
 	@FindBy(id = "btn_sendLog")
 	private WebElement btn_sendLog;
 
+	@FindBy(id = "date_sendToDate")
+	private WebElement date_sendToDate;
+
+	@FindBy(id = "date_receiveToDate")
+	private WebElement date_receiveToDate;	
+	
+	private void setSendDate() {
+		String today = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
+		((JavascriptExecutor)this.driver).executeScript("document.getElementById('date_sendToDate').value = '"+ today +"';", date_sendToDate);	
+	}
+
+	private void setReceiveDate() {
+		String today = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
+		((JavascriptExecutor)this.driver).executeScript("document.getElementById('date_receiveToDate').value = '"+ today +"';", date_receiveToDate);	
+	}
+	
 	public void updatesendCSID(String sender) {
 		wait.until(ExpectedConditions.elementToBeClickable(sendfaxoptionsedit));
 		sendfaxoptionsedit.click();
@@ -152,7 +173,7 @@ public class AccountDetailsPage extends BasePage {
 			logger.info("Waiting for the log record...");
 			Thread.sleep(10000);
 			clickReceiveGo();
-			log = getExpectedReceiveRecordLog(senderid);
+			log = getReceiveRecord(senderid);
 		}
 
 		if (log != null) {
@@ -174,8 +195,21 @@ public class AccountDetailsPage extends BasePage {
 		logger.info("From = " + log.findElements(By.tagName("td")).get(4).getText());
 	}
 
-	//////////////////////////////////////////////////////// Send Logs
-	//////////////////////////////////////////////////////// /////////////////////////////////////////////////////////////
+	private WebElement getReceiveRecord(String senderid)
+	{
+		if (driver.findElements(By.xpath("//*[@id='receive_usageGrid']//td[contains(text(),'" + senderid + "')]/..")).size() > 0)
+			return driver.findElement(By.xpath("//*[@id='receive_usageGrid']//td[contains(text(),'" + senderid + "')]/.."));
+		return null;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	private WebElement getSendRecord(String senderid)
+	{
+		if (driver.findElements(By.xpath("//*[@id='send_usageGrid']//td[contains(text(),'" + senderid + "')]/..")).size() > 0)
+			return driver.findElement(By.xpath("//*[@id='send_usageGrid']//td[contains(text(),'" + senderid + "')]/.."));
+		return null;
+	}
 
 	private WebElement getExpectedSendRecordLog(String senderid) {
 		wait.until(ExpectedConditions
@@ -194,6 +228,7 @@ public class AccountDetailsPage extends BasePage {
 	public boolean isSendActivityLogFound(String senderid, int timeout) throws InterruptedException {
 		clickUsageTab();
 		clickSendActivityDetails();
+		setSendDate();
 		clickSendGo();
 		wait.until(ExpectedConditions
 				.invisibilityOfElementLocated(By.xpath("//div[@id='load_send_usageGrid' and text()='Loading...']")));
@@ -204,7 +239,7 @@ public class AccountDetailsPage extends BasePage {
 			logger.info("Waiting for the log record...");
 			Thread.sleep(10000);
 			clickSendGo();
-			log = getExpectedSendRecordLog(senderid);
+			log = getSendRecord(senderid);
 		}
 
 		if (log != null) {

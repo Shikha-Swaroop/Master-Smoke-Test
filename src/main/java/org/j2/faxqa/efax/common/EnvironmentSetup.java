@@ -44,6 +44,9 @@ public class EnvironmentSetup extends org.testng.Reporter {
 		}
 
 		//********************** Consumer **************************************//
+		Config.myccount_sendWait = Integer.parseInt(prop.getProperty("myccount_sendWait"));
+		Config.myccount_receiveWait = Integer.parseInt(prop.getProperty("myccount_receiveWait"));
+		Config.myccount_inboxWait = Integer.parseInt(prop.getProperty("myccount_inboxWait"));
 		
 		Config.efax_US_myaccountBaseUrl = prop.getProperty("efax_US_myaccountBaseUrl");
 		Config.efax_US_funnelBaseUrl = prop.getProperty("efax_US_funnelBaseUrl");
@@ -70,15 +73,15 @@ public class EnvironmentSetup extends org.testng.Reporter {
 		Config.myfax_funnelBaseUrl = prop.getProperty("myfax_funnelBaseUrl");
 		Config.myfax_landingpageBaseUrl = prop.getProperty("myfax_landingpagelBaseUrl");
 		Config.myfax_DID = prop.getProperty("myfax_DID");
-		Config.myfax_PIN = prop.getProperty("myfax_PIN");
+		Config.myfax_Password = prop.getProperty("myfax_Password");
 		Config.myfax_creditCard = prop.getProperty("myfax_CreditCard");
 		
 		Config.metrofax_myaccountBaseUrl = prop.getProperty("metrofax_myaccountBaseUrl");
 		Config.metrofax_funnelBaseUrl = prop.getProperty("metrofax_funnelBaseUrl");
 		Config.metrofax_landingpageBaseUrl = prop.getProperty("metrofax_landingpagelBaseUrl");
-		Config.metrofax_DID = prop.getProperty("DID");
-		Config.metrofax_PIN = prop.getProperty("PIN");
-		Config.metrofax_creditCard = prop.getProperty("CreditCard");
+		Config.metrofax_DID = prop.getProperty("metrofax_DID");
+		Config.metrofax_PIN = prop.getProperty("metrofax_PIN");
+		Config.metrofax_creditCard = prop.getProperty("metrofax_creditCard");
 		
 		Config.microsites_myaccountBaseUrl = prop.getProperty("microsites_myaccountBaseUrl");
 		Config.microsites_funnelBaseUrl = prop.getProperty("microsites_funnelBaseUrl");
