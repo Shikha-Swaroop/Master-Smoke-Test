@@ -29,7 +29,6 @@ public class SendfaxTests  extends BaseTest {
 		String uniqueid = UUID.randomUUID().toString().replace("-", "").substring(0, 15);
 
 		WebDriver driver = TLDriverFactory.getTLDriver();
-		new FlashPolicyHelper((ChromeDriver) driver).addSite(Config.corp_myaccountBaseUrl);
 		
 		driver.navigate().to(Config.corp_myaccountBaseUrl);
 		LoginPageMyAccount loginpage = new LoginPageMyAccount();
