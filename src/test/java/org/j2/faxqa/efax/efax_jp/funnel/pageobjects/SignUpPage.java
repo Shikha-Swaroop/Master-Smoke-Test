@@ -150,11 +150,13 @@ public class SignUpPage extends BasePage {
 	}
 
 	public void proceedNext1() {
+		wait.until(ExpectedConditions.visibilityOfAllElements(btnChooseNumberSubmitibjp));
 		btnChooseNumberSubmitibjp.click();
 		logger.info("Continuing further with Sign-Up");
 	}
 
 	public void proceedNext2() {
+		wait.until(ExpectedConditions.visibilityOfAllElements(btncontinueenable));
 		btncontinueenable.click();
 		logger.info("Continuing further with Sign-Up");
 	}
