@@ -27,8 +27,12 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.security.cert.X509Certificate;
 
+import org.apache.logging.log4j.LogManager;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+
+import com.google.gson.GsonBuilder;
+
 import java.security.cert.CertificateException;
 
 public class APIClient {
@@ -182,7 +186,6 @@ public class APIClient {
 				{
 					conn.addRequestProperty("Content-Type", "application/json");
 					byte[] block = JSONValue.toJSONString(data).getBytes("UTF-8");
-	
 					conn.setDoOutput(true);
 					OutputStream ostream = conn.getOutputStream();
 					ostream.write(block);

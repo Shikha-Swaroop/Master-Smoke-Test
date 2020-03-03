@@ -139,8 +139,8 @@ public class SignUpPage extends BasePage {
 
 	public boolean anyFaxNumbers() {
 		wait.until(ExpectedConditions.elementToBeClickable(phoneNumberPagination));
-		logger.info("Fax numbers for the selected region found.");
-		return phoneNumberPagination.findElements(By.tagName("input")).size() > 0;
+		logger.info("Attempting to Find Fax numbers for the selected region.");
+		return driver.findElements(By.xpath("//*[@id='phoneNumberPagination']//input")).size() > 0;
 	}
 
 	public String getDefaultFaxNumber() {

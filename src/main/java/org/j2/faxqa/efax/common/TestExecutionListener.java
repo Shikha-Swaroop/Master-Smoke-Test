@@ -102,6 +102,7 @@ public class TestExecutionListener implements IInvokedMethodListener, ISuiteList
 
 		if (testrail != null) {
 			String testrail_caseid = testrail.id().substring(1);
+			logger.info("Updating testresult.");
 			updateResult(testResult, testrail_caseid, testResult.getStatus() == ITestResult.SUCCESS);
 		} else
 			return;
@@ -109,10 +110,11 @@ public class TestExecutionListener implements IInvokedMethodListener, ISuiteList
 
 	@Override
 	public void onFinish(ISuite suite) {
-		logger.info("Done with the execution of all tests.");
 		try {
-			if (Boolean.parseBoolean(System.getProperty("uploadresults"))) {
-				createTestrun(suite);
+			if (Boolean.parseBoolean(System.getProperty("uploadResults"))) {
+				//logger.info("Creating a new TestRun in TestRail.");
+				//createTestrun(suite);
+				logger.info("Uploading Results to TestRail against TestRunId : " + testRunId);
 				uploadResults();
 			} else {
 				logger.info("'uploadresults=false' in POM.xml - Skipping upload result to TestRail.");
@@ -131,7 +133,7 @@ public class TestExecutionListener implements IInvokedMethodListener, ISuiteList
 		File dest = new File(fullPath);
 		try {
 			FileUtils.copyFile(src, dest);
-		} catch (IOException e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 		Reporter.log("<br><img src='" + ".\\Suite" + relPath + "' style=\"width: 33%; height: 33%\"/></br>");
@@ -175,8 +177,8 @@ public class TestExecutionListener implements IInvokedMethodListener, ISuiteList
 		try {
 			result = (JSONObject) tr_client.sendPost(String.format("add_run/%s", suite.getXmlSuite().getAllParameters().get("testrailprojectid").replace("P", "")), newrun);
 			logger.info(new GsonBuilder().setPrettyPrinting().create().toJson(result));
-		} catch (Exception e) {
-			logger.error("TestRail Host Not found (VPN required?)");
+		} catch (Throwable e) {
+			logger.error("TestRail Host Not found. [Please check if VPN is enabled.]");
 			e.printStackTrace();
 			return;
 		}
@@ -186,15 +188,16 @@ public class TestExecutionListener implements IInvokedMethodListener, ISuiteList
 	}
 
 	private void uploadResults() {
-
+		tr_client = new APIClient(System.getProperty("testrailBaseUrl"));
 		JSONArray result = null;
 
 		try {
 			Map<String, List<Map<String, Object>>> objresults = new HashMap<String, List<Map<String, Object>>>();
 			objresults.put("results", results);
-			result = (JSONArray) tr_client.sendPost(String.format("add_results_for_cases/%s", testRunId), objresults);
+			logger.info(new GsonBuilder().setPrettyPrinting().create().toJson(objresults));
+			result = (JSONArray) tr_client.sendPost(String.format("add_results_for_cases/%s", testRunId.replace("R", "")), objresults);
 			logger.info(new GsonBuilder().setPrettyPrinting().create().toJson(result));
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 			return;
 		}

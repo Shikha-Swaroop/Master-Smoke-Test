@@ -64,7 +64,9 @@ public class LoginPage extends BasePage {
 	}
 
 	public boolean isLoggedIn() {
-		return !(driver.findElements(By.xpath(loginbutton)).size() > 0); 
+		boolean flag = !(driver.findElements(By.xpath(loginbutton)).size() > 0);
+		logger.info("isLoggedIn = " + flag);
+		return flag; 
 	}
 
 }

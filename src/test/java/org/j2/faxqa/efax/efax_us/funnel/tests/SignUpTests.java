@@ -63,6 +63,7 @@ public class SignUpTests extends BaseTest {
 			state = signup.setState();
 			city = signup.setCity();
 		}
+		
 		signup.proceedNext();
 		signup.setFirstName(firstname);
 		signup.setLastName(lastname);
