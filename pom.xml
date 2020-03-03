@@ -15,7 +15,7 @@
 		<testrailBaseUrl>https://testrail.j2noc.com</testrailBaseUrl>
 		<testrailUser>jagadeesh.medabalimi@j2.com</testrailUser>
 		<testrailpassword>testrail</testrailpassword>
-		<uploadResults>true</uploadResults>
+		<uploadResults>false</uploadResults>
 		<testRunId>R482</testRunId>
 		<webbrowser>chrome</webbrowser>
 	</properties>
