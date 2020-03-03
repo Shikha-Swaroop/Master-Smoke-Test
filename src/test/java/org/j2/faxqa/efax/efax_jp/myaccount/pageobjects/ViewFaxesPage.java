@@ -32,14 +32,8 @@ public class ViewFaxesPage extends BasePage {
 		logger.info(driver.getTitle() + " - [" + driver.getCurrentUrl() + "]");
 	}
 
-	@FindBy(xpath = "//*/a/span[contains(text(),'å�—ä¿¡ãƒˆãƒ¬ã‚¤')]")
+	@FindBy(xpath = "//*/a/span[contains(text(),'受信トレイ')]")
 	private WebElement inbox;
-
-	@FindBy(xpath = "//*/a/span[text()='é€�ä¿¡æ¸ˆã�¿']")
-	private WebElement sent;
-
-	@FindBy(xpath = "//*/a/span[text()='ã‚´ãƒŸç®±'")
-	private WebElement trash;
 
 	@FindBy(xpath = "//*[@id='messageCenter']//li[@class='x-tree-node']")
 	private WebElement folders;

@@ -32,7 +32,7 @@ public class SignUpTests extends BaseTest {
 
 		driver = TLDriverFactory.getTLDriver();
 		logger.info("Navigating to - " + Config.efax_US_funnelBaseUrl);
-		driver.navigate().to(Config.efax_US_funnelBaseUrl);
+		driver.get(Config.efax_US_funnelBaseUrl);
 
 		String random = UUID.randomUUID().toString().replace("-", "").substring(0, 12);
 		String firstname = "QATest";
@@ -91,21 +91,9 @@ public class SignUpTests extends BaseTest {
 		String[] login = signup.getLoginDetails().split(";");
 		String fax = login[0];
 		String pin = login[1];
-
-		if (signup.isLoginBtnAvailable()) {
-			
-			signup.clickLogin();
-		}
-
-		if (!signup.isLoggedIn()) {
-			//driver.navigate().to(Config.efax_US_funnelBaseUrl);
-			//driver.navigate().refresh();
-			signup.LoginWithCredentials(fax, pin);
-		}
-
-		Assert.assertTrue(flag);
-
-		flag = signup.logout();
+		
+		driver.get(Config.efax_US_myaccountBaseUrl);
+		flag = signup.LoginWithCredentials(fax, pin);
 		Assert.assertTrue(flag);
 	}
 }

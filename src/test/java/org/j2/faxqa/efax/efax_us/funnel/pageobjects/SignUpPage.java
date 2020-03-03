@@ -376,21 +376,14 @@ public class SignUpPage {
 		}
 	}
 	
-	public void LoginWithCredentials(String faxnumber, String pin) {
+	public boolean LoginWithCredentials(String faxnumber, String pin) {
 		logger.info("Signing-in with credentials.");
 		driver.findElement(By.id("phoneNumber")).sendKeys(faxnumber);
 		driver.findElement(By.id("pin")).sendKeys(pin);
 		driver.findElement(By.id("loginSubmitBtn")).click();
-	}
-
-	public boolean logout() {
-		if (driver.findElement(By.id("logout")).isDisplayed()) {
-			driver.findElement(By.id("logout")).click();
-			logger.info("Sign-out successful.");
-			return true;
-		} else {
-			logger.info("Sign-out unsuccessful.");
+		if (driver.findElements(By.id("loginSubmitBtn")).size() > 0)
 			return false;
-		}
+		else
+			return true;
 	}
 }
