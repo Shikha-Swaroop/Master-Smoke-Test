@@ -126,10 +126,10 @@ public class SignUpPage extends BasePage {
 		logger.info("Setting faxnumber country to - " + text);
 	}
 
-	public void selectAreaCode() {
-		wait.until(ExpectedConditions.elementToBeClickable(ddlChooseNumberSearchAreaCodeibjp));
+	public void selectAreaCode() throws InterruptedException {
+		Thread.sleep(3000);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='ddlChooseNumberSearchAreaCodeibjp']/option[contains(text(), '市外局番を選択してください')]")));
 		Select selection = new Select(ddlChooseNumberSearchAreaCodeibjp);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='ddlChooseNumberSearchAreaCodeibjp']/option[1][text()='市外局番を選択してください']")));
 		int i = new Faker().number().numberBetween(1, selection.getOptions().size());
 		selection.selectByIndex(i);
 		String acrea = selection.getFirstSelectedOption().getText();
@@ -275,16 +275,19 @@ public class SignUpPage extends BasePage {
 	}
 
 	public void activateAccount() {
+		wait.until(ExpectedConditions.visibilityOfAllElements(lnkBillingConfirmSubmitJP));
 		lnkBillingConfirmSubmitJP.click();
 		logger.info("Attempting to Activate Account");
 	}
 
 	public void proceedNext3() {
+		wait.until(ExpectedConditions.visibilityOfAllElements(lnkBillingiSubmitjp));
 		lnkBillingiSubmitjp.click();
 		logger.info("Proceeding Next");
 	}
 	
 	public boolean isSignUpSuccess() {
+		wait.until(ExpectedConditions.elementToBeClickable(btnLogin));
 		if (driver.findElements(By.id("btnLogin")).size() > 0) {
 			logger.info(String.format("Registration successful"));
 			return true;

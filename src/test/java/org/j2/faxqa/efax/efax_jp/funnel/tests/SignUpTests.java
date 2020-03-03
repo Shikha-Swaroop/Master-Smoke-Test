@@ -109,6 +109,7 @@ public class SignUpTests extends BaseTest {
 		logger.info(loginId + " & " + password + " & " + faxNumber);
 
 		driver.get(Config.efax_JP_myaccountBaseUrl);
+		
 		signup.LoginWithCredentials(loginId, password);
 
 		flag = signup.logout();
