@@ -357,7 +357,7 @@ public class TestNGReportListener implements IReporter {
 					long duration = firstResult.getEndMillis() - start;
 
 					String time = LocalDateTime.ofInstant(Instant.ofEpochMilli(firstResult.getStartMillis()), TimeZone.getDefault().toZoneId()).format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm"));
-					String duratin = duration/(1000 * 60) + " minutes";
+					String duratin = duration/(1000 * 60) + " Minutes";
 					
 					// The first method per class shares a row with the class
 					// header

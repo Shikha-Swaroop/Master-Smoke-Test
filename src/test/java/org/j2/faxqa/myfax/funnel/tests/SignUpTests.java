@@ -3,6 +3,7 @@ package org.j2.faxqa.myfax.funnel.tests;
 import java.util.UUID;
 import org.j2.faxqa.efax.common.BaseTest;
 import org.j2.faxqa.efax.common.Config;
+import org.j2.faxqa.efax.common.Retry;
 import org.j2.faxqa.efax.common.TLDriverFactory;
 import org.j2.faxqa.efax.common.TestRail;
 import org.j2.faxqa.myfax.funnel.pageobjects.SignUpPage;
@@ -17,7 +18,7 @@ import com.github.javafaker.Faker;
 public class SignUpTests extends BaseTest {
 
 	@TestRail(id = "C8539")
-	@Test(enabled = true, groups = { "smoke" }, priority = 1, description = "MyFax > Funnel > My Account > Validate Account Registration is Successful & Login to My Account without issues")
+	@Test(enabled = true, retryAnalyzer = Retry.class, groups = { "smoke" }, priority = 1, description = "MyFax > Funnel > My Account > Validate Account Registration is Successful & Login to My Account without issues")
 	public void verifyNewUserSignUpLogin(ITestContext context) throws Exception {
 		WebDriver driver = null;
 

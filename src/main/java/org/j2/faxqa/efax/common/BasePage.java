@@ -15,6 +15,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import jdk.jfr.Timespan;
+
 public class BasePage {
 
 	public WebDriver driver = TLDriverFactory.getTLDriver();
@@ -95,9 +97,16 @@ public class BasePage {
 
 	public String getWelcomeEmail(String email, String subject, int timeout) {
 		WebDriver driver = TLDriverFactory.getTLDriver();
+		WebDriverWait wait = new WebDriverWait(driver, 15);
+		
 		driver.navigate().to("https://www.mailinator.com/v3/index.jsp?zone=public&query=<email>#/#msgpane".replace("<email>", email.split("@")[0]));
+		
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//table/tbody/tr/td[4]/a[contains(text(), '" + subject + "')]")));
 		driver.findElement(By.xpath("//table/tbody/tr/td[4]/a[contains(text(), '" + subject + "')]")).click();
+		
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//*[@id='parts_buttons']/button[1]")));
 		driver.findElement(By.xpath("//*[@id='parts_buttons']/button[1]")).click();
+		
 		return driver.switchTo().frame("msg_body").findElement(By.tagName("body")).getText();
 	}
 

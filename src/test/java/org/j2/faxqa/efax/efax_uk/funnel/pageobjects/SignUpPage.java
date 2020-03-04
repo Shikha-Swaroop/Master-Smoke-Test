@@ -1,6 +1,8 @@
 package org.j2.faxqa.efax.efax_uk.funnel.pageobjects;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -241,12 +243,15 @@ public class SignUpPage extends BasePage {
 
 	public void selectCardNumber(String text) {
 		this.scrollToTheSpecificWebelement(CreditCardNumber);
+		String cardNumber = text.replaceAll("....", "$0 ");
 		CreditCardNumber.click();
-		CreditCardNumber.sendKeys(text.replaceAll("....", "$0 "));
+		CreditCardNumber.clear();
+		CreditCardNumber.sendKeys(cardNumber+Keys.TAB);		
 		logger.info("CreditCardNumber set to - " + text);
 	}
 
 	public void selectCardCVVNumber(String text) {
+		CreditCardCVV.click();
 		CreditCardCVV.clear();
 		CreditCardCVV.sendKeys(text);
 		logger.info("CreditCardCVV set to - " + text);
@@ -295,6 +300,6 @@ public class SignUpPage extends BasePage {
 	}
 	
 	public boolean isLoggedIn() {
-		return !(driver.findElements(By.xpath("//*[@id='loginForm']//input[@name='Submit']")).size() > 0); 
+		return driver.getCurrentUrl().contains("https://portal.efax.co.uk/myaccount/homepage"); 
 	}
 }

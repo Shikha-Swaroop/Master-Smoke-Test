@@ -27,7 +27,7 @@ import com.github.javafaker.Faker;
 public class AdminTests extends BaseTest {
 
 	@TestRail(id = "C8144")
-	@Test(enabled = true, priority = 0, groups = {"smoke", "regression" }, description = "Verify that new admin user should be created successfully")
+	@Test(enabled = true, groups = {"smoke" }, description = "Verify that new admin user should be created successfully")
 	public void adminUserShouldBeCreatedSuccessfully() throws Exception {
 		WebDriver driver = null;
 		String primaryemail = null;

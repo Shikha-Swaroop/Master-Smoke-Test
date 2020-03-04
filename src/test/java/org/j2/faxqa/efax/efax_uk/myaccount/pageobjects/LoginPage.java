@@ -64,9 +64,7 @@ public class LoginPage extends BasePage {
 	}
 
 	public boolean isLoggedIn() {
-		boolean flag = !(driver.findElements(By.xpath(loginbutton)).size() > 0);
-		logger.info("isLoggedIn = " + flag);
-		return flag; 
+		return driver.getCurrentUrl().contains("https://portal.efax.co.uk/myaccount/homepage"); 
 	}
 
 }

@@ -44,6 +44,7 @@ public class EnvironmentSetup extends org.testng.Reporter {
 		}
 
 		//********************** Consumer **************************************//
+		Config.retryAttempts = Integer.parseInt(prop.getProperty("retryAttempts"));
 		Config.myccount_sendWait = Integer.parseInt(prop.getProperty("myccount_sendWait"));
 		Config.myccount_receiveWait = Integer.parseInt(prop.getProperty("myccount_receiveWait"));
 		Config.myccount_inboxWait = Integer.parseInt(prop.getProperty("myccount_inboxWait"));

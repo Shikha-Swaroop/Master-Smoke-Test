@@ -217,11 +217,13 @@ public class SignUpPage {
 	}
 
 	public void proceedNext() {
+		wait.until(ExpectedConditions.elementToBeClickable(btnChooseNumberSubmit));
 		btnChooseNumberSubmit.click();
 		logger.info("Continuing further with Sign-Up");
 	}
 
 	public void setFirstName(String text) {
+		wait.until(ExpectedConditions.visibilityOfAllElements(txtFirstName));
 		txtFirstName.clear();
 		txtFirstName.sendKeys(text);
 		logger.info("FirstName set to - " + text);
@@ -378,6 +380,7 @@ public class SignUpPage {
 	
 	public boolean LoginWithCredentials(String faxnumber, String pin) {
 		logger.info("Signing-in with credentials.");
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("phoneNumber")));
 		driver.findElement(By.id("phoneNumber")).sendKeys(faxnumber);
 		driver.findElement(By.id("pin")).sendKeys(pin);
 		driver.findElement(By.id("loginSubmitBtn")).click();

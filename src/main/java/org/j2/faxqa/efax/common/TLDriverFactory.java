@@ -36,21 +36,11 @@ public class TLDriverFactory {
 		case "chrome":
 			WebDriverManager.chromedriver().setup();
 			ChromeOptions choptions = new ChromeOptions();
-			//choptions.setCapability("InPrivate", true);
+			choptions.setCapability("InPrivate", true);
 			choptions.setExperimentalOption("excludeSwitches", Arrays.asList("disable-component-update")); 
 			choptions.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			choptions.addArguments("--ignore-certificate-errors");		
-			choptions.addArguments("--disable-features=EnableEphemeralFlashPermission");
-			choptions.addArguments("--disable-features=VizDisplayCompositor");
-			choptions.addArguments("--start-maximized");
-			choptions.addArguments("--disable-infobars");
-			choptions.setExperimentalOption("useAutomationExtension", false);
-			
-			Map<String, Object> prefs = new HashMap<>();
-			prefs.put("profile.content_settings.exceptions.plugins.*,*.setting", 1);
-			prefs.put("profile.default_content_settings.state.flash",1);
-			choptions.setExperimentalOption("prefs", prefs);
-			
+			choptions.addArguments("--start-maximized");			
 			tlDriver.set(new ChromeDriver(choptions));
 			break;
 
@@ -96,7 +86,6 @@ public class TLDriverFactory {
 			chromeoptions.addArguments("--disable-features=VizDisplayCompositor");
 			chromeoptions.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			chromeoptions.addArguments("--start-maximized");
-			chromeoptions.addArguments("--disable-infobars");			
 			chromeoptions.setExperimentalOption("useAutomationExtension", false);
 			tlDriver.set(new ChromeDriver(chromeoptions));
 			break;
@@ -105,11 +94,12 @@ public class TLDriverFactory {
 
 		LogManager.getLogger().info("Created ThreadLocal webdriver.");
 		
-		int wait = 15;
 		tlDriver.get().manage().deleteAllCookies();
 		tlDriver.get().manage().window().maximize();
-		tlDriver.get().manage().timeouts().implicitlyWait(wait, TimeUnit.SECONDS);
-		LogManager.getLogger().info("Setting  implicit-wait to '" + wait + "' seconds");
+		tlDriver.get().manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+		tlDriver.get().manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		LogManager.getLogger().info("Setting  pageLoadTimeout to 30 seconds");
+		LogManager.getLogger().info("Setting  implicitlyWait to 30 seconds");
 	}
 
 	public synchronized static WebDriver getTLDriver() {

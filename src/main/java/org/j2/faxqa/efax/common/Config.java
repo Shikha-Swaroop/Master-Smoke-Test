@@ -2,7 +2,8 @@ package org.j2.faxqa.efax.common;
 
 public class Config {
 
-
+	public static int retryAttempts;
+	
 	public static int myccount_sendWait;
 	public static int myccount_receiveWait;
 	public static int myccount_inboxWait;

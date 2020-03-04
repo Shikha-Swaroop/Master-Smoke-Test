@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.j2.faxqa.efax.common.BaseTest;
 import org.j2.faxqa.efax.common.Config;
+import org.j2.faxqa.efax.common.Retry;
 import org.j2.faxqa.efax.common.TLDriverFactory;
 import org.j2.faxqa.efax.common.TestRail;
 import org.j2.faxqa.efax.efax_uk.funnel.pageobjects.SignUpPage;
@@ -28,7 +29,7 @@ public class SignUpTests extends BaseTest {
 	// https://testrail.test.j2noc.com/
 
 	@TestRail(id = "C8538")
-	@Test(enabled = true, groups = { "smoke" }, priority = 1, description = "eFax > UK > Funnel > My Account > Validate Account Registration is Successful & Login to My Account without issues")
+	@Test(enabled = true, retryAnalyzer = Retry.class, groups = { "smoke" }, priority = 1, description = "eFax > UK > Funnel > My Account > Validate Account Registration is Successful & Login to My Account without issues")
 	public void verifyNewUserSignUpLogin(ITestContext context) throws Exception {
 		WebDriver driver = null;
 
@@ -107,7 +108,7 @@ public class SignUpTests extends BaseTest {
 		LoginPage login = new LoginPage();
 		login.login(faxNumber, password);
 		
-		Assert.assertTrue(login.isLoggedIn());
+		Assert.assertTrue(signup.isLoggedIn());
 		
 	}
 }

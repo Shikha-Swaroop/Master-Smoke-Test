@@ -69,7 +69,7 @@ public class TestExecutionListener implements IInvokedMethodListener, ISuiteList
 			testResult.getThrowable().printStackTrace();
 			LogManager.getLogger().error(ExceptionUtils.getFullStackTrace(testResult.getThrowable()));
 		}
-		logger.info("Test failed - " + testResult.getMethod().getConstructorOrMethod().getMethod());
+		logger.info("Test failed : " + testResult.getMethod().getConstructorOrMethod().getMethod());
 	}
 
 	@Override
@@ -78,7 +78,9 @@ public class TestExecutionListener implements IInvokedMethodListener, ISuiteList
 			testResult.getThrowable().printStackTrace();
 			LogManager.getLogger().error(ExceptionUtils.getFullStackTrace(testResult.getThrowable()));
 		}
-		logger.info("Test skipped - " + testResult.getMethod().getConstructorOrMethod().getMethod());
+		logger.info("Test skipped : " + testResult.getMethod().getConstructorOrMethod().getMethod());
+		testResult.setStatus(ITestResult.FAILURE);
+		logger.info("Marking Skipped Test as Failure to Retry again.");
 	}
 
 	@Override

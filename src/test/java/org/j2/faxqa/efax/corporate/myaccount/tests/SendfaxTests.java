@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import org.j2.faxqa.efax.common.BaseTest;
 import org.j2.faxqa.efax.common.Config;
 import org.j2.faxqa.efax.common.FlashPolicyHelper;
+import org.j2.faxqa.efax.common.Retry;
 import org.j2.faxqa.efax.common.TLDriverFactory;
 import org.j2.faxqa.efax.common.TestRail;
 import org.j2.faxqa.efax.corporate.admin.CoreFaxFunctions;
@@ -23,7 +24,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 public class SendfaxTests  extends BaseTest {
 
 	@TestRail(id = "C8562")
-	@Test(enabled = true, priority = 1, groups = {"smoke" }, description = "eFax > US > Secured > My Account > Send > Validate fax & Email Notification is sent successfully")
+	@Test(enabled = true, retryAnalyzer = Retry.class, groups = {"smoke" }, description = "eFax > US > Secured > My Account > Send > Validate fax & Email Notification is sent successfully")
 	public void uploadAndSendALargeFileAndVerify() throws Exception {
 
 		String uniqueid = UUID.randomUUID().toString().replace("-", "").substring(0, 15);
@@ -50,7 +51,7 @@ public class SendfaxTests  extends BaseTest {
 	}
 	
 	@TestRail(id = "C8562")
-	@Test(enabled = true, priority = 1, groups = {"smoke" }, description = "eFax > US > Secured > My Account > Send > Validate fax & Email Notification is sent successfully")
+	@Test(enabled = true, retryAnalyzer = Retry.class, groups = {"smoke" }, description = "eFax > US > Secured > My Account > Send > Validate fax & Email Notification is sent successfully")
 	public void sendAFaxToSelfAndVerifyFaxIsReceived() throws Exception {
 
 		String uniqueid = UUID.randomUUID().toString().replace("-", "").substring(0, 15);
