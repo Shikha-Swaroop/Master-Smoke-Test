@@ -53,7 +53,8 @@ public class EnvironmentSetup extends org.testng.Reporter {
 		Config.fstorclientId = prop.getProperty("fstorclientId");
 		Config.fstorclientSecret = prop.getProperty("fstorclientSecret");
 		Config.fstorregion = prop.getProperty("fstorregion");
-		Config.fstorservicekey = prop.getProperty("fstorservicekey");
+		
+		
 		
 		Config.efax_US_myaccountBaseUrl = prop.getProperty("efax_US_myaccountBaseUrl");
 		Config.efax_US_funnelBaseUrl = prop.getProperty("efax_US_funnelBaseUrl");
@@ -61,7 +62,9 @@ public class EnvironmentSetup extends org.testng.Reporter {
 		Config.DID_US = prop.getProperty("DID_US");
 		Config.PIN_US = prop.getProperty("PIN_US");
 		Config.creditCard_US = prop.getProperty("CreditCard_US");
-
+		Config.efax_US_inbound_servicekey = prop.getProperty("efax_US_inbound_servicekey");
+		Config.efax_US_outbound_servicekey = prop.getProperty("efax_US_outbound_servicekey");
+		
 		Config.efax_UK_myaccountBaseUrl = prop.getProperty("efax_UK_myaccountBaseUrl");
 		Config.efax_UK_funnelBaseUrl = prop.getProperty("efax_UK_funnelBaseUrl");
 		Config.efax_UK_landingpageBaseUrl = prop.getProperty("efax_UK_landingpagelBaseUrl");

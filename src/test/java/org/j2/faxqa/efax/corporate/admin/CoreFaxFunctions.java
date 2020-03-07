@@ -1,55 +1,28 @@
 package org.j2.faxqa.efax.corporate.admin;
 
-import java.awt.Robot;
-import java.io.File;
-import java.io.FileInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.j2.faxqa.efax.common.Config;
 import org.j2.faxqa.efax.common.TLDriverFactory;
 import org.j2.faxqa.efax.corporate.admin.pageobjects.AddUser;
 import org.j2.faxqa.efax.corporate.admin.pageobjects.EditUser;
 import org.j2.faxqa.efax.corporate.admin.pageobjects.HomePage;
 import org.j2.faxqa.efax.corporate.admin.pageobjects.LoginPage;
-import org.j2.faxqa.efax.corporate.admin.pageobjects.NavigationBar;
 import org.j2.faxqa.efax.corporate.admin.pageobjects.UsersPage;
 import org.j2.faxqa.efax.corporate.myaccount.pageobjects.HomePageMyAccount;
 import org.j2.faxqa.efax.corporate.myaccount.pageobjects.LoginPageMyAccount;
 import org.j2.faxqa.efax.corporate.myaccount.pageobjects.NavigationBarMyAccount;
 import org.j2.faxqa.efax.corporate.myaccount.pageobjects.SendFaxesModalMyAccount;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.zeroturnaround.zip.ZipUtil;
-
 import com.github.javafaker.Faker;
-import com.github.javafaker.service.FakeValuesService;
-import com.github.javafaker.service.RandomService;
 
 public class CoreFaxFunctions {
 
