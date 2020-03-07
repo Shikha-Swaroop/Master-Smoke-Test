@@ -29,14 +29,14 @@ public class SendfaxTests extends BaseTest {
 		loginpage.login(Config.DID_UK, Config.PIN_UK);
 
 		HomePage homepage = new HomePage();
-		homepage.gotoacctdetailsview();
+		homepage.clickAccountDetailsTab();
 
 		String senderid = UUID.randomUUID().toString().replace("-", "").substring(0, 15);
 		AccountDetailsPage acctdetailspage = new AccountDetailsPage();
 		acctdetailspage.updatesendCSID(senderid);
 
 		homepage = new HomePage();
-		homepage.gotosendfaxesview();
+		homepage.clickSendFaxesTab();
 
 		SendFaxesPage sendpage = new SendFaxesPage();
 		sendpage.sendfax(senderid);
@@ -54,14 +54,14 @@ public class SendfaxTests extends BaseTest {
 		loginpage.login(Config.DID_UK, Config.PIN_UK);
 
 		HomePage homepage = new HomePage();
-		homepage.gotoacctdetailsview();
+		homepage.clickAccountDetailsTab();
 
 		String senderid = UUID.randomUUID().toString().replace("-", "").substring(0, 15);
 		AccountDetailsPage acctdetailspage = new AccountDetailsPage();
 		acctdetailspage.updatesendCSID(senderid);
 
 		homepage = new HomePage();
-		homepage.gotosendfaxesview();
+		homepage.clickSendFaxesTab();
 
 		SendFaxesPage sendpage = new SendFaxesPage();
 		sendpage.sendfax(senderid);
@@ -70,7 +70,7 @@ public class SendfaxTests extends BaseTest {
 		boolean flag;
 
 		homepage = new HomePage();
-		homepage.gotoacctdetailsview();
+		homepage.clickAccountDetailsTab();
 		acctdetailspage = new AccountDetailsPage();
 		flag = acctdetailspage.isSendActivityLogFound(senderid, Config.myccount_sendWait);
 		// Assert.assertTrue(flag);

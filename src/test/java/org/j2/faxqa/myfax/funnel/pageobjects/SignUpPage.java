@@ -34,10 +34,11 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.logging.log4j.*;
+import org.j2.faxqa.efax.common.BasePage;
 import org.j2.faxqa.efax.common.Config;
 import org.j2.faxqa.efax.common.TLDriverFactory;
 
-public class SignUpPage {
+public class SignUpPage extends BasePage {
 	private WebDriver driver;
 	private Logger logger;
 	WebDriverWait wait;
@@ -46,12 +47,12 @@ public class SignUpPage {
 		this.driver = TLDriverFactory.getTLDriver();
 		this.logger = LogManager.getLogger();
 		PageFactory.initElements(driver, this);
-		wait = new WebDriverWait(driver, 30);
+		wait = new WebDriverWait(driver, 60);
 		logger.info(driver.getTitle() + " - [" + driver.getCurrentUrl() + "]");
 	}
 
-	@FindBy(id = "lblMyFaxChooseNumberOldUSMap")
-	private WebElement lblMyFaxChooseNumberOldUSMap;
+	@FindBy(id = "spanMyFaxChooseNumberOldUSMap")
+	private WebElement spanMyFaxChooseNumberOldUSMap;
 
 	@FindBy(id = "ddlMyFaxChooseNumberOldState")
 	private WebElement ddlMyFaxChooseNumberOldState;
@@ -125,9 +126,10 @@ public class SignUpPage {
 	@FindBy(id = "lblMyFaxLoginText")
 	private WebElement lblMyFaxLoginText;
 
-	public void setCountryUnitedStates() {
-		wait.until(ExpectedConditions.elementToBeClickable(lblMyFaxChooseNumberOldUSMap));
-		lblMyFaxChooseNumberOldUSMap.click();
+	public void setCountryUnitedStates() throws InterruptedException {
+		Thread.sleep(3000);
+		wait.until(ExpectedConditions.elementToBeClickable(spanMyFaxChooseNumberOldUSMap));
+		doubleClickAction(spanMyFaxChooseNumberOldUSMap);
 		logger.info("Selecting country as United States");
 	}
 
@@ -169,6 +171,7 @@ public class SignUpPage {
 	}
 	
 	public void proceed2() {
+		wait.until(ExpectedConditions.elementToBeClickable(btnAbandonedUser));
 		btnAbandonedUser.click();
 	}
 	
@@ -257,6 +260,7 @@ public class SignUpPage {
 	}
 
 	public void activateAccount() {
+		wait.until(ExpectedConditions.elementToBeClickable(btnBillingInfoSubmitEnable));
 		btnBillingInfoSubmitEnable.click();
 		logger.info("Attempting to Activate Account");
 	}

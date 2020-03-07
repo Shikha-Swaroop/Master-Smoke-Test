@@ -34,7 +34,7 @@ public class SendFaxesPage {
 		this.driver = TLDriverFactory.getTLDriver();
 		this.logger = LogManager.getLogger();
 		PageFactory.initElements(driver, this);
-		wait = new WebDriverWait(driver, 30);
+		wait = new WebDriverWait(driver, 15);
 		logger.info(driver.getTitle() + " - [" + driver.getCurrentUrl() + "]");
 	}
 
@@ -42,12 +42,10 @@ public class SendFaxesPage {
 	String random;
 	String email = "jagadeesh.medabalimi@j2.com";
 	String mode = "Standard";
-	String country = "United States";
-	@FindBy(id = "txt_websend_recipientFirstName")
-	private WebElement recipientFirstName;
-
-	@FindBy(id = "txt_websend_recipientLastName")
-	private WebElement recipientLastName;
+	String country = "United Kingdom";
+	
+	@FindBy(id = "txt_websend_recipientName")
+	private WebElement recipientName;
 
 	@FindBy(id = "txt_websend_recipientCompany")
 	private WebElement recipientCompany;
@@ -113,12 +111,10 @@ public class SendFaxesPage {
 		Stream<Path> pathstream = Files.list(folder).filter(f -> f.getFileName().toString().endsWith(".txt"));
 		attachments = Files.list(folder).filter(f -> f.getFileName().toString().endsWith(".txt")).limit(1).map(f -> f.toAbsolutePath().toString()).collect(Collectors.joining("|"));
 
-		setrecipientFirstName(random);
-		setrecipientLastName(random);
+		setrecipientName(random);
 		setrecipientCompany(random);
 		settoCountry(country);
 		setfaxNumber(Config.DID_US);
-		setselectContact(true);
 		setaddContact();
 		setincludeCoverPage(true);
 		setfaxSubject(random);
@@ -190,13 +186,6 @@ public class SendFaxesPage {
 		}
 	}
 
-	private void setselectContact(boolean check) {
-		if (check && !selectContact.isSelected())
-			selectContact.click();
-		else if (!check && selectContact.isSelected())
-			selectContact.click();
-	}
-
 	private void settoCountry(String text) {
 		Select country = new Select(toCountry);
 		country.selectByVisibleText(text);
@@ -214,14 +203,9 @@ public class SendFaxesPage {
 		logger.info("Receipent Company field set to " + text);
 	}
 
-	private void setrecipientLastName(String text) {
-		recipientLastName.sendKeys(text);
-		logger.info("Recipient LastName field set to " + text);
-	}
-
-	private void setrecipientFirstName(String text) {
-		wait.until(ExpectedConditions.elementToBeClickable(recipientFirstName));
-		recipientFirstName.sendKeys(text);
+	private void setrecipientName(String text) {
+		wait.until(ExpectedConditions.elementToBeClickable(recipientName));
+		recipientName.sendKeys(text);
 		logger.info("Recipient FirstName field set to " + text);
 	}
 

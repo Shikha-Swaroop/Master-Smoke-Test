@@ -12,10 +12,19 @@ import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.LoginPage;
 import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.NavigationBar;
 import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.SendFaxesPage;
 import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.ViewFaxesPage;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.Test;
+
+import io.restassured.RestAssured;
+import io.restassured.RestAssured.*;
+import io.restassured.matcher.RestAssuredMatchers.*;
+import io.restassured.response.Response;
+
+import org.hamcrest.Matchers.*;
 
 //@Listeners({TestExecutionListener.class, TestNGReportListener.class})
 public class SendfaxTests extends BaseTest {
@@ -43,13 +52,42 @@ public class SendfaxTests extends BaseTest {
 		Assert.assertTrue(sendpage.confirmationVerify());
 
 	}
-	
+
 	@TestRail(id = "C8521")
 	@Test(enabled = true, groups = { "smoke" }, priority = 1, description = "eFax > US > Non-Secured > Send > FSTOR > Validate Meta data & Image is stored successfully")
 	public void nonsecureSendValidateMetadataAndImageIsStoredSuccessfully(ITestContext context) throws Exception {
-		throw new Exception("NotImplementedException");
+		RestAssured.baseURI = Config.fstorhost;
+		//https://amp.fstor.us.j2.com/oauth/token?grant_type=client_credentials
+		//https://amp.fstor.us.j2.com/fstor-oauth/faxes?fax_system=EFAX&element_name=servicekey&element_value=107728639
+		Response response = RestAssured.given()
+				.auth().basic(Config.fstorclientId, Config.fstorclientSecret)
+                .contentType("application/x-www-form-urlencoded")
+                .param("grant_type", "client_credentials")
+                .when()
+                .post("/oauth/token");
+		JSONObject jsonObject = new JSONObject();
+		new JSONParser().parse(response.getBody().asString());
+	    String accessToken = jsonObject.get("access_token").toString();
+	    
+	    response = RestAssured.given()
+				.header("Authorization", "Bearer " + accessToken)
+                .contentType("application/x-www-form-urlencoded")
+                .param("fax_system", "EFAX")
+                .param("element_name", "servicekey")
+                .param("element_value", Config.efax_US_inbound_servicekey)
+                .when()
+                .post("/fstor-oauth/faxes");
+	    
+	    response = RestAssured.given()
+				.header("Authorization", "Bearer " + accessToken)
+                .contentType("application/x-www-form-urlencoded")
+                .param("fax_system", "EFAX")
+                .param("element_name", "servicekey")
+                .param("element_value", Config.efax_US_outbound_servicekey)
+                .when()
+                .post("/fstor-oauth/faxes");
 	}
-	
+
 	@TestRail(id = "C8522")
 	@Test(enabled = true, groups = { "smoke" }, priority = 1, description = "eFax > US > Non-Secured > My Account > Receive > Validate fax is received successfully ")
 	public void nonsecureMyAccountValidateFaxIsReceivedSuccessfully(ITestContext context) throws Exception {
@@ -78,12 +116,12 @@ public class SendfaxTests extends BaseTest {
 		homepage.gotoacctdetailsview();
 		acctdetailspage = new AccountDetailsPage();
 		flag = acctdetailspage.isSendActivityLogFound(senderid, Config.myccount_sendWait);
-		//Assert.assertTrue(flag);
+		// Assert.assertTrue(flag);
 
 		acctdetailspage.switchToReceiveLogs();
 		acctdetailspage = new AccountDetailsPage();
 		flag = acctdetailspage.isReceiveActivityLogFound(senderid, Config.myccount_receiveWait);
-		//Assert.assertTrue(flag);
+		// Assert.assertTrue(flag);
 
 		NavigationBar navigate = new NavigationBar();
 		navigate.clickViewFaxesTab();
@@ -93,7 +131,7 @@ public class SendfaxTests extends BaseTest {
 		Assert.assertTrue(flag);
 
 	}
-	
+
 	@TestRail(id = "C8523")
 	@Test(enabled = true, groups = { "smoke" }, priority = 1, description = "eFax > US > Non-Secured > Receive > FSTOR > Validate Meta data & Image is retrieved successfully")
 	public void nonsecureValidateReceiveMetadataAndImageIsStoredSuccessfully(ITestContext context) throws Exception {
@@ -105,19 +143,19 @@ public class SendfaxTests extends BaseTest {
 	public void secureMyAccountValidateFaxIsSentSuccessfully(ITestContext context) throws Exception {
 		throw new Exception("NotImplementedException");
 	}
-	
+
 	@TestRail(id = "C8525")
 	@Test(enabled = true, groups = { "smoke" }, priority = 1, description = "eFax > US > Secured > Send > FSTOR > Validate Meta data & Image is stored successfully ")
 	public void secureSendValidateMetadataAndImageIsStoredSuccessfully(ITestContext context) throws Exception {
 		throw new Exception("NotImplementedException");
 	}
-	
+
 	@TestRail(id = "C8526")
 	@Test(enabled = true, groups = { "smoke" }, priority = 1, description = "eFax > US > Secured > My Account > Receive > Validate fax is received successfully ")
 	public void secureMyAccountValidateFaxIsReceivedSuccessfully(ITestContext context) throws Exception {
 		throw new Exception("NotImplementedException");
 	}
-	
+
 	@TestRail(id = "C8526")
 	@Test(enabled = true, groups = { "smoke" }, priority = 1, description = "eFax > US > Secured > Receive > FSTOR > Validate Meta data & Image is retrieved successfully ")
 	public void secureValidateReceiveMetadataAndImageIsStoredSuccessfully(ITestContext context) throws Exception {

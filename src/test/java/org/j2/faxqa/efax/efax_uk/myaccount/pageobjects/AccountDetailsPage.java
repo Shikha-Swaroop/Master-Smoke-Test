@@ -81,7 +81,7 @@ public class AccountDetailsPage extends BaseTest {
 	@FindBy(id = "lnkUsageActivityLogReceive")
 	private WebElement lnkUsageActivityLogReceive;
 
-	@FindBy(id = "lnkUsageActivityLogSent")
+	@FindBy(xpath = "//*[contains(text(),'Sent Faxes:')]/..//a[contains(text(),'Activity Log')]")
 	private WebElement lnkUsageActivityLogSent;
 
 	@FindBy(id = "receive_usageGrid")

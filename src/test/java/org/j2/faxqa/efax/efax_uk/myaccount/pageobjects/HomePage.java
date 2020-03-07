@@ -15,10 +15,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.apache.logging.log4j.*;
+import org.j2.faxqa.efax.common.BasePage;
 import org.j2.faxqa.efax.common.Config;
 import org.j2.faxqa.efax.common.TLDriverFactory;
 
-public class HomePage {
+public class HomePage extends NavigationBar {
 	private WebDriver driver;
 	private Logger logger;
 	WebDriverWait wait;

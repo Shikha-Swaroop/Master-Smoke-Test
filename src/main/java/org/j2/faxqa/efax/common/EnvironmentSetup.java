@@ -49,6 +49,12 @@ public class EnvironmentSetup extends org.testng.Reporter {
 		Config.myccount_receiveWait = Integer.parseInt(prop.getProperty("myccount_receiveWait"));
 		Config.myccount_inboxWait = Integer.parseInt(prop.getProperty("myccount_inboxWait"));
 		
+		Config.fstorhost = prop.getProperty("fstorhost");
+		Config.fstorclientId = prop.getProperty("fstorclientId");
+		Config.fstorclientSecret = prop.getProperty("fstorclientSecret");
+		Config.fstorregion = prop.getProperty("fstorregion");
+		Config.fstorservicekey = prop.getProperty("fstorservicekey");
+		
 		Config.efax_US_myaccountBaseUrl = prop.getProperty("efax_US_myaccountBaseUrl");
 		Config.efax_US_funnelBaseUrl = prop.getProperty("efax_US_funnelBaseUrl");
 		Config.efax_US_landingpageBaseUrl = prop.getProperty("efax_US_landingpagelBaseUrl");

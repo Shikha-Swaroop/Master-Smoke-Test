@@ -8,6 +8,12 @@ public class Config {
 	public static int myccount_receiveWait;
 	public static int myccount_inboxWait;
 
+	public static String fstorhost;
+	public static String fstorclientId;
+	public static String fstorclientSecret;
+	public static String fstorregion;
+
+	
 	/* efax US related config*/ 
 	public static String efax_US_myaccountBaseUrl;
 	public static String efax_US_funnelBaseUrl;
@@ -15,7 +21,11 @@ public class Config {
 	public static String DID_US;
 	public static String PIN_US;
 	public static String creditCard_US;
-	 
+	public static String efax_US_customerkey;
+	public static String efax_US_inbound_servicekey;
+	public static String efax_US_outbound_servicekey;
+	
+	
 	/* efax UK related config*/ 
 	public static String efax_UK_myaccountBaseUrl;
 	public static String efax_UK_funnelBaseUrl;

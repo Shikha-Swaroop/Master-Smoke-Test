@@ -24,7 +24,8 @@ public class SignUpTests extends BaseTest {
 
 		driver = TLDriverFactory.getTLDriver();
 		driver.get(Config.myfax_funnelBaseUrl);
-
+		driver.navigate().refresh();
+		driver.navigate().refresh();
 		Faker testdata = new Faker();
 		String random = UUID.randomUUID().toString().replace("-", "").substring(0, 12);
 		String firstname = "QA" + testdata.address().firstName().toUpperCase().replace("'", "");
