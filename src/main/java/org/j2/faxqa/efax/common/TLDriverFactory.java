@@ -96,7 +96,7 @@ public class TLDriverFactory {
 		
 		tlDriver.get().manage().deleteAllCookies();
 		tlDriver.get().manage().window().maximize();
-		tlDriver.get().manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+		tlDriver.get().manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
 		tlDriver.get().manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		LogManager.getLogger().info("Setting  pageLoadTimeout to 30 seconds");
 		LogManager.getLogger().info("Setting  implicitlyWait to 30 seconds");

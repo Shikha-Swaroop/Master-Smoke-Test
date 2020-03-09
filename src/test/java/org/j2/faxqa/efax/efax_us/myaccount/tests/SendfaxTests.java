@@ -1,30 +1,19 @@
 package org.j2.faxqa.efax.efax_us.myaccount.tests;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
-
-import org.j2.faxqa.efax.common.BaseTest;
-import org.j2.faxqa.efax.common.Config;
-import org.j2.faxqa.efax.common.TLDriverFactory;
-import org.j2.faxqa.efax.common.TestRail;
-import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.AccountDetailsPage;
-import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.HomePage;
-import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.LoginPage;
-import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.NavigationBar;
-import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.SendFaxesPage;
-import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.ViewFaxesPage;
+import org.j2.faxqa.efax.common.*;
+import org.j2.faxqa.efax.efax_us.myaccount.pageobjects.*;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.Test;
-
 import io.restassured.RestAssured;
-import io.restassured.RestAssured.*;
-import io.restassured.matcher.RestAssuredMatchers.*;
 import io.restassured.response.Response;
-
-import org.hamcrest.Matchers.*;
 
 //@Listeners({TestExecutionListener.class, TestNGReportListener.class})
 public class SendfaxTests extends BaseTest {
@@ -56,36 +45,46 @@ public class SendfaxTests extends BaseTest {
 	@TestRail(id = "C8521")
 	@Test(enabled = true, groups = { "smoke" }, priority = 1, description = "eFax > US > Non-Secured > Send > FSTOR > Validate Meta data & Image is stored successfully")
 	public void nonsecureSendValidateMetadataAndImageIsStoredSuccessfully(ITestContext context) throws Exception {
+		WebDriver driver = TLDriverFactory.getTLDriver();
+		driver.navigate().to(Config.efax_US_myaccountBaseUrl);
+		LoginPage loginpage = new LoginPage();
+		loginpage.login(Config.DID_US, Config.PIN_US);
+
+		HomePage homepage = new HomePage();
+		homepage.gotoacctdetailsview();
+
+		String senderid = UUID.randomUUID().toString().replace("-", "").substring(0, 15);
+		AccountDetailsPage acctdetailspage = new AccountDetailsPage();
+		acctdetailspage.updatesendCSID(senderid);
+
+		homepage = new HomePage();
+		homepage.gotosendfaxesview();
+
+		SendFaxesPage sendpage = new SendFaxesPage();
+		sendpage.sendfax(senderid);
+
+		///////////////////// FSTOR VALIDATION ///////////////////////////////////
 		RestAssured.baseURI = Config.fstorhost;
-		//https://amp.fstor.us.j2.com/oauth/token?grant_type=client_credentials
-		//https://amp.fstor.us.j2.com/fstor-oauth/faxes?fax_system=EFAX&element_name=servicekey&element_value=107728639
-		Response response = RestAssured.given()
-				.auth().basic(Config.fstorclientId, Config.fstorclientSecret)
-                .contentType("application/x-www-form-urlencoded")
-                .param("grant_type", "client_credentials")
-                .when()
-                .post("/oauth/token");
-		JSONObject jsonObject = new JSONObject();
-		new JSONParser().parse(response.getBody().asString());
-	    String accessToken = jsonObject.get("access_token").toString();
-	    
-	    response = RestAssured.given()
-				.header("Authorization", "Bearer " + accessToken)
-                .contentType("application/x-www-form-urlencoded")
-                .param("fax_system", "EFAX")
-                .param("element_name", "servicekey")
-                .param("element_value", Config.efax_US_inbound_servicekey)
-                .when()
-                .post("/fstor-oauth/faxes");
-	    
-	    response = RestAssured.given()
-				.header("Authorization", "Bearer " + accessToken)
-                .contentType("application/x-www-form-urlencoded")
-                .param("fax_system", "EFAX")
-                .param("element_name", "servicekey")
-                .param("element_value", Config.efax_US_outbound_servicekey)
-                .when()
-                .post("/fstor-oauth/faxes");
+		// https://amp.fstor.us.j2.com/oauth/token?grant_type=client_credentials
+		Response response = RestAssured.given().auth().basic(Config.fstorclientId, Config.fstorclientSecret).contentType("application/x-www-form-urlencoded").param("grant_type", "client_credentials").when().post("/oauth/token");
+
+		JSONObject jsonObject = (JSONObject) (new JSONParser()).parse(response.getBody().asString());
+		String accessToken = jsonObject.get("access_token").toString();
+		String date = LocalDateTime.now().plusDays(-1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
+		A:for (int i = 1; i <= 60; i++) {
+			// https://amp.fstor.us.j2.com/fstor-oauth/faxes?fax_system=EFAX&element_name=servicekey&element_value=107728639
+			response = RestAssured.given().header("Authorization", "Bearer " + accessToken).contentType("application/x-www-form-urlencoded").param("fax_system", "EFAX").param("element_name", "servicekey")
+					.param("min_completed_timestamp", date).param("element_value", Config.efax_US_outbound_servicekey).when().get("/fstor-oauth/sentfaxes");
+			JSONObject sentFaxes = (JSONObject) (new JSONParser()).parse(response.getBody().asString());
+			for (Object obj : (JSONArray) sentFaxes.get("faxes")) {
+				if (((JSONObject) obj).get("subject").toString().equalsIgnoreCase(senderid)) {
+					System.out.println(((JSONObject) obj).get("subject"));
+					break A;
+				}
+			}
+			System.out.println("Not yet found, waiting 5 seconds before a retry");
+			Thread.sleep(5000);
+		}
 	}
 
 	@TestRail(id = "C8522")
@@ -135,7 +134,48 @@ public class SendfaxTests extends BaseTest {
 	@TestRail(id = "C8523")
 	@Test(enabled = true, groups = { "smoke" }, priority = 1, description = "eFax > US > Non-Secured > Receive > FSTOR > Validate Meta data & Image is retrieved successfully")
 	public void nonsecureValidateReceiveMetadataAndImageIsStoredSuccessfully(ITestContext context) throws Exception {
-		throw new Exception("NotImplementedException");
+		WebDriver driver = TLDriverFactory.getTLDriver();
+		driver.navigate().to(Config.efax_US_myaccountBaseUrl);
+		LoginPage loginpage = new LoginPage();
+		loginpage.login(Config.DID_US, Config.PIN_US);
+
+		HomePage homepage = new HomePage();
+		homepage.gotoacctdetailsview();
+
+		String senderid = UUID.randomUUID().toString().replace("-", "").substring(0, 15);
+		AccountDetailsPage acctdetailspage = new AccountDetailsPage();
+		acctdetailspage.updatesendCSID(senderid);
+
+		homepage = new HomePage();
+		homepage.gotosendfaxesview();
+
+		SendFaxesPage sendpage = new SendFaxesPage();
+		sendpage.sendfax(senderid);
+
+		///////////////////// FSTOR VALIDATION ///////////////////////////////////
+		RestAssured.baseURI = Config.fstorhost;
+		// https://amp.fstor.us.j2.com/oauth/token?grant_type=client_credentials
+		Response response = RestAssured.given().auth().basic(Config.fstorclientId, Config.fstorclientSecret).contentType("application/x-www-form-urlencoded").param("grant_type", "client_credentials").when().post("/oauth/token");
+
+		JSONObject jsonObject = (JSONObject) (new JSONParser()).parse(response.getBody().asString());
+		String accessToken = jsonObject.get("access_token").toString();
+		String date = LocalDateTime.now().plusDays(-1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
+
+		A:for (int i = 1; i <= 60; i++) {
+			response = RestAssured.given().header("Authorization", "Bearer " + accessToken).contentType("application/x-www-form-urlencoded").param("fax_system", "EFAX").param("element_name", "servicekey")
+					.param("min_completed_timestamp", date).param("element_value", Config.efax_US_inbound_servicekey).when().get("/fstor-oauth/receivedfaxes");
+
+			JSONObject receivedFaxes = (JSONObject) (new JSONParser()).parse(response.getBody().asString());
+			for (Object obj : (JSONArray) receivedFaxes.get("faxes")) {
+				if (((JSONObject) obj).get("subject").toString().contains(senderid)) {
+					System.out.println((JSONObject) obj);
+					break A;
+				}
+
+			}
+			System.out.println("Receive MetaData Not yet found, waiting 5 seconds before a retry");
+			Thread.sleep(5000);
+		}
 	}
 
 	@TestRail(id = "C8524")
